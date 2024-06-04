@@ -12,6 +12,17 @@ module.exports = {
          },
       },
       extend: {
+         colors: {
+            primary: '#FF6363',
+            secondary: {
+               100: '#E2E2D5',
+               200: '#888883',
+            },
+         },
+         boxShadow: {
+            'inner-right': 'inset 2px 0 4px -1px rgba(0, 0, 0, 0.05)',
+            'inner-left': 'inset -2px 0 4px -1px rgba(0, 0, 0, 0.05)',
+         },
          keyframes: {
             'accordion-down': {
                from: { height: '0' },
