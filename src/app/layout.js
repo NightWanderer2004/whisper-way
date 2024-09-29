@@ -1,17 +1,42 @@
-import { Inter } from 'next/font/google'
+import { cn } from '@/lib/utils'
+import { e_ukraine } from './fonts'
 import './globals.css'
 
-const inter = Inter({ subsets: ['latin'] })
+const APP_NAME = 'Travel Mate'
+const APP_DEFAULT_TITLE = 'Travel Mate'
+const APP_DESCRIPTION =
+   'Get personalized guidance, explore trending spots, and plan your trips with ease. With just a few clicks, you can tailor your trip to match your style.'
 
 export const metadata = {
-   title: 'Travel Mate',
-   description: '...',
+   applicationName: APP_NAME,
+   title: {
+      default: APP_DEFAULT_TITLE,
+   },
+   description: APP_DESCRIPTION,
+   manifest: '/manifest.json',
+   appleWebApp: {
+      capable: true,
+      statusBarStyle: 'default',
+      title: APP_DEFAULT_TITLE,
+      startUpImage: ['/startup.jpg'],
+   },
 }
 
 export default function RootLayout({ children }) {
    return (
       <html lang='en'>
-         <body className={inter.className}>{children}</body>
+         <head>
+            <meta charSet='UTF-8' />
+            <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+            <meta name='description' content={metadata.description} />
+            <title>{metadata.title}</title>
+            <link rel='icon' href='/favicon.ico' />
+            <link rel='icon' type='image/png' sizes='16x16' href='/favicon-16x16.png' />
+            <link rel='icon' type='image/png' sizes='32x32' href='/favicon-32x32.png' />
+            <link rel='apple-touch-icon' sizes='180x180' href='/apple-touch-icon.png' />
+            <link rel='icon' type='image/png' sizes='192x192' href='/android-chrome-192x192.png' />
+         </head>
+         <body className={cn(e_ukraine.className, 'bg-neutral-100')}>{children}</body>
       </html>
    )
 }
