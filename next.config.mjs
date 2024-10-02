@@ -6,5 +6,7 @@ const withPWA = withPWAInit({
 })
 
 export default withPWA({
-   // Your Next.js config
+   env: {
+      MAP_KEY: process.env.MAP_KEY,
+   },
 })

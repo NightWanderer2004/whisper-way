@@ -26,3 +26,19 @@ body {
    margin: 0;
    overflow: hidden;
 }
+
+.marker {
+   @apply w-[40px] h-[42px] cursor-pointer flex items-center justify-center;
+}
+.marker .icon {
+   @apply relative z-40 flex justify-center items-center w-[18px] h-[18px] text-[18px] leading-none;
+}
+.marker::before {
+   content: '';
+   @apply absolute z-10 bg-[url(/img/pin-out.svg)] bg-no-repeat bg-contain w-full h-full rounded-[999%];
+   backdrop-filter: blur(4px);
+}
+.marker::after {
+   content: '';
+   @apply absolute z-20 bg-[url(/img/pin-in.svg)] bg-no-repeat bg-contain opacity-75 w-[36px] h-[38.4px] rounded-[999%];
+}

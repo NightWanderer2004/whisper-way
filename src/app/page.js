@@ -1,21 +1,65 @@
 'use client'
-import Image from 'next/image'
-import Gradient from '/public/gradient.jpg'
 import { motion } from 'framer-motion'
+import Map from '@/components/Map'
+import { useEffect, useState } from 'react'
+import { getCoordinates } from '@/lib/utils'
+import { icons } from 'lucide-react'
 
 export default function Home() {
+   const [locations, setLocations] = useState([])
+   useEffect(() => {
+      const places = [
+         {
+            icon: '🎒',
+            place: 'Politechnika Świętokrzyska w Kielcach',
+         },
+         {
+            icon: '🌳',
+            place: 'Park Linowy Kielce',
+         },
+         {
+            icon: '🛍️',
+            place: 'Galeria Echo',
+         },
+
+         {
+            icon: '🍕',
+            place: 'Pizza Hut Kielce',
+         },
+         {
+            icon: '🍔',
+            place: 'McDonalds Kielce',
+         },
+         {
+            icon: '🍺',
+            place: 'Pub Stara Piekarnia Kielce',
+         },
+      ]
+
+      const getLocations = async () => {
+         const locationPromises = places.map(el => getCoordinates(el.place))
+         const locationsData = await Promise.all(locationPromises)
+         locationsData.forEach((el, i) => {
+            el.name = places[i].place
+            el.icon = places[i].icon
+         })
+         setLocations(locationsData)
+      }
+
+      getLocations()
+   }, [])
+
    return (
-      <main className='text-textColor text-2xl flex justify-center items-center h-dvh'>
-         {/* <Image
-            className='pointer-events-none fixed left-0 opacity-95 -z-10 scale-[230%] lg:scale-[120%] animate-rotation'
-            src={Gradient}
-            placeholder='blur'
-            alt='Gradient'
-            quality={70}
-         /> */}
-         <motion.h1 initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease: 'backOut' }}>
+      <main className='text-textColor text-2xl flex flex-col justify-center items-center h-dvh'>
+         <motion.h1
+            className='fixed z-50 top-3'
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: 'backOut' }}
+         >
             Travel Mate
          </motion.h1>
+         <Map locations={locations} />
       </main>
    )
 }
