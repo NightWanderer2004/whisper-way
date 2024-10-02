@@ -37,6 +37,7 @@ body {
    content: '';
    @apply absolute z-10 bg-[url(/img/pin-out.svg)] bg-no-repeat bg-contain w-full h-full rounded-[999%];
    backdrop-filter: blur(4px);
+   --webkit-backdrop-filter: blur(4px);
 }
 .marker::after {
    content: '';
