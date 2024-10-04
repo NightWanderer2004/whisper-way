@@ -53,7 +53,7 @@ export default function Map({ locations }) {
    }, [locations])
 
    return (
-      <div className='h-screen-safe w-screen p-2'>
+      <div className='h-screen-safe w-screen p-0.5'>
          <Skeleton className='skeleton h-full w-full rounded-3xl' />
          <motion.div
             animate={{ opacity: loading ? 0 : 1, scale: loading ? 0.98 : 1 }}
