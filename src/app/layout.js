@@ -16,6 +16,7 @@ export const metadata = {
    manifest: '/manifest.json',
    appleWebApp: {
       capable: true,
+      display: 'standalone',
       statusBarStyle: 'black-translucent',
       title: APP_DEFAULT_TITLE,
    },
@@ -28,6 +29,7 @@ export default function RootLayout({ children }) {
             <meta charSet='UTF-8' />
             <meta name='viewport' content='width=device-width, initial-scale=1.0, viewport-fit=cover' />
             <meta name='mobile-web-app-capable' content='yes' />
+            <meta name='apple-mobile-web-app-capable' content='yes' />
             <meta name='apple-mobile-web-app-status-bar-style' content='black-translucent' />
             <meta name='description' content={metadata.description} />
             <title>{metadata.title.default}</title>
@@ -36,18 +38,9 @@ export default function RootLayout({ children }) {
             <link rel='icon' type='image/png' sizes='32x32' href='/favicon-32x32.png' />
             <link rel='apple-touch-icon' sizes='180x180' href='/apple-touch-icon.png' />
             <link rel='icon' type='image/png' sizes='192x192' href='/android-chrome-192x192.png' />
-            <link
-               rel='apple-touch-startup-image'
-               href='/startup.jpg'
-               media='(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)'
-            />
+            <link rel='apple-touch-startup-image' href='/startup.jpg' media='(device-width: 375px)' />
          </head>
-         <body
-            style={{ backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.65)), url(/gradient.jpg)' }}
-            className={cn(e_ukraine.className, 'bg-cover overflow-hidden h-screen container mx-auto px-4')}
-         >
-            {children}
-         </body>
+         <body className={cn(e_ukraine.className)}>{children}</body>
       </html>
    )
 }

@@ -1,26 +1,35 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
-import Marker from './Marker'
+import { Skeleton } from './ui/skeleton'
+import { motion } from 'framer-motion'
+
+mapboxgl.accessToken = process.env.MAP_KEY
 
 export default function Map({ locations }) {
-   const map = useRef()
-   const mapContainerRef = useRef()
+   const map = useRef(null)
+   const mapContainerRef = useRef(null)
+   const [loading, setLoading] = useState(true)
 
    const coords = [20.632208, 50.87181]
    const zoom = 13
 
    useEffect(() => {
-      mapboxgl.accessToken = process.env.MAP_KEY
-      map.current = new mapboxgl.Map({
-         style: 'mapbox://styles/night2004/clz02xsbu00fp01qnc82b2lm9',
-         container: mapContainerRef.current,
-         center: coords,
-         zoom: zoom,
-      })
-
-      return () => {
-         map.current.remove()
+      if (!mapboxgl.supported()) {
+         console.error('Your browser does not support Mapbox GL')
+         return
+      }
+      if (!map.current && mapContainerRef.current) {
+         map.current = new mapboxgl.Map({
+            style: 'mapbox://styles/night2004/clz02xsbu00fp01qnc82b2lm9',
+            container: mapContainerRef.current,
+            center: coords,
+            zoom: zoom,
+         })
+         map.current.on('load', () => {
+            setLoading(false)
+            document.querySelector('.skeleton').remove()
+         })
       }
    }, [])
 
@@ -43,5 +52,16 @@ export default function Map({ locations }) {
       }
    }, [locations])
 
-   return <div className='h-screen w-screen absolute top-0 left-0' id='map-container' ref={mapContainerRef} />
+   return (
+      <div className='h-screen-safe w-screen p-2'>
+         <Skeleton className='skeleton h-full w-full rounded-3xl' />
+         <motion.div
+            animate={{ opacity: loading ? 0 : 1, scale: loading ? 0.98 : 1 }}
+            transition={{ duration: 0.55, ease: 'backOut' }}
+            className='map opacity-0 h-full w-full rounded-3xl'
+            id='map-container'
+            ref={mapContainerRef}
+         />
+      </div>
+   )
 }

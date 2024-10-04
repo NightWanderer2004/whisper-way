@@ -14,26 +14,21 @@ export default function Home() {
             place: 'Politechnika Świętokrzyska w Kielcach',
          },
          {
-            icon: '🌳',
-            place: 'Park Linowy Kielce',
-         },
-         {
             icon: '🛍️',
             place: 'Galeria Echo',
          },
-
-         {
-            icon: '🍕',
-            place: 'Pizza Hut Kielce',
-         },
-         {
-            icon: '🍔',
-            place: 'McDonalds Kielce',
-         },
-         {
-            icon: '🍺',
-            place: 'Pub Stara Piekarnia Kielce',
-         },
+         // {
+         //    icon: '🍕',
+         //    place: 'Pizza Hut Kielce',
+         // },
+         // {
+         //    icon: '🍔',
+         //    place: 'McDonalds Kielce',
+         // },
+         // {
+         //    icon: '🍺',
+         //    place: 'Pub Stara Piekarnia Kielce',
+         // },
       ]
 
       const getLocations = async () => {
@@ -51,14 +46,6 @@ export default function Home() {
 
    return (
       <main className='text-textColor text-2xl flex flex-col justify-center items-center h-dvh'>
-         <motion.h1
-            className='fixed z-50 top-3'
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: 'backOut' }}
-         >
-            Travel Mate
-         </motion.h1>
          <Map locations={locations} />
       </main>
    )
