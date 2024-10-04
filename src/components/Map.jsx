@@ -53,12 +53,12 @@ export default function Map({ locations }) {
    }, [locations])
 
    return (
-      <div className='h-screen-safe w-screen p-0.5'>
-         <Skeleton className='skeleton h-full w-full rounded-3xl' />
+      <div className='h-[calc(100vh+env(safe-area-inset-top))] w-screen'>
+         <Skeleton className='skeleton h-full w-full' />
          <motion.div
             animate={{ opacity: loading ? 0 : 1, scale: loading ? 0.98 : 1 }}
             transition={{ duration: 0.55, ease: 'backOut' }}
-            className='map opacity-0 h-full w-full rounded-3xl'
+            className='map opacity-0 h-full w-full'
             id='map-container'
             ref={mapContainerRef}
          />
