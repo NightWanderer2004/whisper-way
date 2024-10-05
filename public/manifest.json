@@ -2,14 +2,21 @@
    "name": "Travel Mate",
    "short_name": "Travel Mate",
    "start_url": "/",
-   "display": "standalone",
+   "display": "fullscreen",
    "orientation": "portrait",
-   "apple-mobile-web-app-capable": "yes",
-   "apple-mobile-web-app-status-bar-style": "black-translucent",
+   "shortcuts": [
+      {
+         "name": "Start a new trip",
+         "short_name": "New trip",
+         "description": "Start a new trip",
+         "url": "/",
+         "icons": [{ "src": "/img/map.svg", "sizes": "192x192" }]
+      }
+   ],
    "icons": [
       {
          "src": "/favicon.ico",
-         "sizes": "64x64 32x32 24x24 16x16",
+         "sizes": "48x48",
          "type": "image/x-icon",
          "purpose": "maskable"
       },
