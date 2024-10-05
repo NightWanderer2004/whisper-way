@@ -23,16 +23,18 @@ module.exports = {
          boxShadow: {
             smooth:
                'inset 0px 2px 3px 1.5px rgba(255, 255, 255, 20%), inset 0px -4px 10px 1.5px rgba(0, 0, 0, 60%), 0px 2px 8px 1px rgba(0, 0, 0, 10%)',
-            skqueo:
-               'inset 0px 3px 1px 0.5px rgba(255, 255, 255, 80%), inset 0px -2px 1px 0.5px rgba(0, 0, 0, 60%), inset 0px 11px 8px -3.5px rgba(255, 255, 255, 60%), inset 0px -6px 8px -3.5px rgba(0, 0, 0, 25%), 0px 2px 9px -1.5px rgba(0, 0, 0, 25%)',
-            'skqueo-activated':
-               'inset 0px 3px 10px 0.5px rgba(0, 0, 0, 22%), inset 0px 2px 1px 0.5px rgba(0, 0, 0, 60%), inset 0px 6px 14px -1.5px rgba(0, 0, 0, 60%), inset 0px -6px 8px -3.5px rgba(0, 0, 0, 25%), 0px 2px 9px -1.5px rgba(0, 0, 0, 25%)',
-            'skqueo-white':
+            skeuo: 'inset 0px 1px 1px 0.5px rgba(255, 255, 255, 70%), inset 0px -2px 1px 0.5px rgba(0, 0, 0, 60%), inset 0px 9px 8px -3.5px rgba(255, 255, 255, 50%), inset 0px -6px 8px -3.5px rgba(0, 0, 0, 25%)',
+            'skeuo-active':
+               'inset 0px 3px 10px 0.5px rgba(0, 0, 0, 22%), inset 0px 2px 1px 0.5px rgba(0, 0, 0, 60%), inset 0px 6px 14px -1.5px rgba(0, 0, 0, 60%), inset 0px -6px 8px -3.5px rgba(0, 0, 0, 25%)',
+            'skeuo-white':
                'inset 0px 3px 1px 0.5px rgba(255, 255, 255, 80%), inset 0px -2px 1px 0.5px rgba(0, 0, 0, 60%), inset 0px 11px 8px -3.5px rgba(255, 255, 255, 60%), inset 0px -6px 8px -3.5px rgba(0, 0, 0, 25%), 0px 1.2px 6px -1.5px rgba(0, 0, 0, 15%)',
-            'skqueo-white-activated':
+            'skeuo-white-active':
                'inset 0px 5px 10px 0.5px rgba(0, 0, 0, 25%), inset 0px 2px 1px 0.5px rgba(0, 0, 0, 60%), inset 0px 6px 14px -1.5px rgba(0, 0, 0, 60%), inset 0px -6px 8px -3.5px rgba(0, 0, 0, 25%), 0px 1.2px 6px -1.5px rgba(0, 0, 0, 15%)',
             'inner-right': 'inset 2px 0 4px -1px rgba(0, 0, 0, 0.05)',
             'inner-left': 'inset -2px 0 4px -1px rgba(0, 0, 0, 0.05)',
+         },
+         transitionTimingFunction: {
+            gentle: 'cubic-bezier(0.47, 0, 0.23, 1.38)',
          },
          keyframes: {
             rotation: {

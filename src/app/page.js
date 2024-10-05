@@ -1,9 +1,8 @@
 'use client'
-import { motion } from 'framer-motion'
 import Map from '@/components/Map'
 import { useEffect, useState } from 'react'
 import { getCoordinates } from '@/lib/utils'
-import { icons } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 export default function Home() {
    const [locations, setLocations] = useState([])
@@ -45,8 +44,9 @@ export default function Home() {
    }, [])
 
    return (
-      <main className='text-textColor text-2xl flex flex-col justify-center items-center h-dvh'>
+      <main className='relative h-screen text-textColor text-2xl flex flex-col justify-center items-center'>
          <Map locations={locations} />
+         <Button className='absolute z-50 bottom-safe-offset-4 w-[95%]'>map</Button>
       </main>
    )
 }

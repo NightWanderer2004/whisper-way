@@ -3,9 +3,19 @@
 @tailwind utilities;
 
 @layer components {
-   .accent-bg {
-      background-color: rgba(250, 250, 249, 0.6);
-      border: 2px solid rgba(255, 255, 255, 0.3);
+   .accent-fill {
+      @apply bg-whiteBg/60 border-2 border-white/30;
+   }
+   .skeuo,
+   .skeuo::before {
+      @apply transition-all duration-700 ease-gentle;
+   }
+   .skeuo::before {
+      content: '';
+      @apply rounded-[14px] absolute top-0 left-0 w-full h-full z-30 shadow-skeuo mix-blend-soft-light;
+   }
+   .skeuo:active::before {
+      @apply shadow-skeuo-active;
    }
 }
 
@@ -15,7 +25,6 @@ body {
 }
 html {
    min-height: calc(100% + env(safe-area-inset-top));
-   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 body {
    background-image: linear-gradient(rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.65)), url(/gradient.jpg);
