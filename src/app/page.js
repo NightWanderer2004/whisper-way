@@ -46,7 +46,7 @@ export default function Home() {
    return (
       <main className='relative h-screen text-textColor text-2xl flex flex-col justify-center items-center'>
          <Map locations={locations} />
-         <Button className='absolute z-50 bottom-safe-offset-4 w-[95%]'>map</Button>
+         <Button className='absolute z-50 bottom-safe w-[95%]'>map</Button>
       </main>
    )
 }
