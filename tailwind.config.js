@@ -13,7 +13,8 @@ module.exports = {
       },
       extend: {
          colors: {
-            whiteBg: '#fafaf9',
+            whiteBg: 'rgba(250, 250, 249, 0.6)',
+            selectedBg: 'rgba(132, 204, 22, 0.3)',
             blackBg: '#171717',
             textColor: '#737373',
          },
@@ -27,11 +28,9 @@ module.exports = {
             'skeuo-active':
                'inset 0px 3px 10px 0.5px rgba(0, 0, 0, 22%), inset 0px 2px 1px 0.5px rgba(0, 0, 0, 60%), inset 0px 6px 14px -1.5px rgba(0, 0, 0, 60%), inset 0px -6px 8px -3.5px rgba(0, 0, 0, 25%)',
             'skeuo-white':
-               'inset 0px 3px 1px 0.5px rgba(255, 255, 255, 80%), inset 0px -2px 1px 0.5px rgba(0, 0, 0, 60%), inset 0px 11px 8px -3.5px rgba(255, 255, 255, 60%), inset 0px -6px 8px -3.5px rgba(0, 0, 0, 25%), 0px 1.2px 6px -1.5px rgba(0, 0, 0, 15%)',
+               'inset 0px 3px 1px 0.5px rgba(255, 255, 255, 80%), inset 0px -1.5px 3px 0.5px rgba(0, 0, 0, 5%), inset 0px 11px 8px -3.5px rgba(255, 255, 255, 60%), inset 0px -6px 8px -3.5px rgba(0, 0, 0, 5%)',
             'skeuo-white-active':
-               'inset 0px 5px 10px 0.5px rgba(0, 0, 0, 25%), inset 0px 2px 1px 0.5px rgba(0, 0, 0, 60%), inset 0px 6px 14px -1.5px rgba(0, 0, 0, 60%), inset 0px -6px 8px -3.5px rgba(0, 0, 0, 25%), 0px 1.2px 6px -1.5px rgba(0, 0, 0, 15%)',
-            'inner-right': 'inset 2px 0 4px -1px rgba(0, 0, 0, 0.05)',
-            'inner-left': 'inset -2px 0 4px -1px rgba(0, 0, 0, 0.05)',
+               'inset 0px 5px 10px 0.5px rgba(0, 0, 0, 5%), inset 0px 2px 1px 0.5px rgba(0, 0, 0, 10%), inset 0px 6px 14px -1.5px rgba(0, 0, 0, 10%), inset 0px -6px 8px -3.5px rgba(0, 0, 0, 10%)',
          },
          transitionTimingFunction: {
             gentle: 'cubic-bezier(0.47, 0, 0.23, 1.38)',

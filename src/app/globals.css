@@ -6,16 +6,50 @@
    .accent-fill {
       @apply bg-whiteBg/60 border-2 border-white/30;
    }
+
+   .marker {
+      @apply w-[40px] h-[42px] cursor-pointer flex items-center justify-center;
+   }
+   .marker .icon {
+      @apply relative z-40 flex justify-center items-center w-[18px] h-[18px] text-[18px] leading-none;
+   }
+   .marker::before {
+      content: '';
+      @apply absolute z-10 bg-[url(/img/pin-out.svg)] bg-no-repeat bg-contain w-full h-full rounded-[999%];
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+   }
+   .marker::after {
+      content: '';
+      @apply absolute z-20 bg-[url(/img/pin-in.svg)] bg-no-repeat bg-contain opacity-75 w-[36px] h-[38.4px] rounded-[999%];
+   }
+
    .skeuo,
-   .skeuo::before {
+   .skeuo-white,
+   .skeuo-white-active,
+   .skeuo::before,
+   .skeuo-white::before,
+   .skeuo-white-active::before {
       @apply transition-all duration-700 ease-gentle;
    }
-   .skeuo::before {
+   .skeuo::before,
+   .skeuo-white::before,
+   .skeuo-white-active::before {
       content: '';
-      @apply rounded-[14px] absolute top-0 left-0 w-full h-full z-30 shadow-skeuo mix-blend-soft-light;
+      @apply rounded-[14px] absolute top-0 left-0 w-full h-full z-30 mix-blend-soft-light;
+   }
+   /* Inner shadows */
+   .skeuo::before {
+      @apply shadow-skeuo;
+   }
+   .skeuo-white::before {
+      @apply shadow-skeuo-white;
    }
    .skeuo:active::before {
-      @apply shadow-skeuo-active;
+      @apply shadow-skeuo-active mix-blend-overlay;
+   }
+   .skeuo-white-active::before {
+      @apply shadow-skeuo-white-active mix-blend-soft-light;
    }
 }
 
@@ -32,21 +66,4 @@ body {
    background-position: center;
    background-repeat: no-repeat;
    background-size: cover;
-}
-
-.marker {
-   @apply w-[40px] h-[42px] cursor-pointer flex items-center justify-center;
-}
-.marker .icon {
-   @apply relative z-40 flex justify-center items-center w-[18px] h-[18px] text-[18px] leading-none;
-}
-.marker::before {
-   content: '';
-   @apply absolute z-10 bg-[url(/img/pin-out.svg)] bg-no-repeat bg-contain w-full h-full rounded-[999%];
-   backdrop-filter: blur(4px);
-   -webkit-backdrop-filter: blur(4px);
-}
-.marker::after {
-   content: '';
-   @apply absolute z-20 bg-[url(/img/pin-in.svg)] bg-no-repeat bg-contain opacity-75 w-[36px] h-[38.4px] rounded-[999%];
 }

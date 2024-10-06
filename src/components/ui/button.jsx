@@ -17,13 +17,16 @@ const buttonVariants = cva(
             ghost: 'hover:bg-stone-100 hover:text-stone-900 dark:hover:bg-stone-800 dark:hover:text-stone-50',
             link: 'text-stone-900 underline-offset-4 hover:underline dark:text-stone-50',
             skeuo: 'skeuo shadow-[0_2px_9px_-1.5px_rgba(0,0,0,25%)] overflow-hidden relative bg-blackBg text-white font-normal lowercase border-2 border-[#161616] rounded-[16px]',
+            'skeuo-white':
+               'skeuo-white shadow-[0_1.2px_6px_-1.5px_rgba(0,0,0,15%)] overflow-hidden relative bg-whiteBg text-black font-normal lowercase border-2 border-white/10 rounded-[16px]',
          },
          size: {
             default: 'h-9 rounded-md px-4 py-2',
             sm: 'h-8 rounded-md px-3 text-xs',
             lg: 'h-10 rounded-md px-8',
             icon: 'h-9 w-9',
-            skeuo: 'h-[55px] px-[26px] py-[18px] text-base active:text-[15.85px] transition-all duration-700 ease-gentle',
+            skeuo: 'h-[55px] px-[26px] py-[18px] text-base active:text-[15.85px] active:text-opacity-90 transition-all duration-700 ease-gentle',
+            'skeuo-white': 'h-[55px] px-[20px] py-[12px] text-[18px] transition-all duration-700 ease-gentle',
          },
       },
       defaultVariants: {
