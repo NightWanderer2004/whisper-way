@@ -101,7 +101,7 @@ const FormMessage = React.forwardRef(({ className, children, ...props }, ref) =>
             transition={{ duration: 0.55, ease: 'backOut' }}
             ref={ref}
             id={formMessageId}
-            className={cn('text-[0.8rem] font-normal text-red-500/80 absolute -bottom-7', className)}
+            className={cn('text-[0.8rem] font-normal text-red-500/80 absolute left-1.5 -bottom-7', className)}
             {...props}
          >
             {body}
