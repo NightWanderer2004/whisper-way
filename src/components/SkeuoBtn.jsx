@@ -16,7 +16,7 @@ export default function SkeuoBtn({ children, main = false, onClick }) {
          size={main ? 'skeuo' : 'skeuo-white'}
          variant={main ? 'skeuo' : 'skeuo-white'}
          className={cn(
-            main ? 'absolute z-50 bottom-safe w-[95%]' : 'w-auto text-[18px]',
+            main ? 'absolute z-50 bottom-safe w-[95%]' : 'w-auto text-[18px] text-textAccent',
             isChecked && 'bg-selectedBg skeuo-white-active text-[17.85px] text-opacity-90',
          )}
       >

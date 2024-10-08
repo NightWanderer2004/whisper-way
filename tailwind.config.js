@@ -16,14 +16,14 @@ module.exports = {
             whiteBg: 'rgba(250, 250, 249, 0.6)',
             selectedBg: 'rgba(132, 204, 22, 0.3)',
             blackBg: '#171717',
+            textAccent: '#292524',
             textColor: '#737373',
          },
          backgroundImage: {
             'main-gradient': "url('/gradient.jpg')",
          },
          boxShadow: {
-            smooth:
-               'inset 0px 2px 3px 1.5px rgba(255, 255, 255, 20%), inset 0px -4px 10px 1.5px rgba(0, 0, 0, 60%), 0px 2px 8px 1px rgba(0, 0, 0, 10%)',
+            smooth: '0px 0.5px 2px 1px rgba(0, 0, 0, 5%)',
             skeuo: 'inset 0px 1px 1px 0.5px rgba(255, 255, 255, 70%), inset 0px -2px 1px 0.5px rgba(0, 0, 0, 60%), inset 0px 9px 8px -3.5px rgba(255, 255, 255, 50%), inset 0px -6px 8px -3.5px rgba(0, 0, 0, 25%)',
             'skeuo-active':
                'inset 0px 3px 10px 0.5px rgba(0, 0, 0, 22%), inset 0px 2px 1px 0.5px rgba(0, 0, 0, 60%), inset 0px 6px 14px -1.5px rgba(0, 0, 0, 60%), inset 0px -6px 8px -3.5px rgba(0, 0, 0, 25%)',

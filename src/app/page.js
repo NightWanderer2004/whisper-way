@@ -1,25 +1,13 @@
 'use client'
 import Map from '@/components/Map'
 import { useEffect, useState } from 'react'
-import { getCoordinates } from '@/lib/utils'
+import { getCoordinates, getProximity } from '@/lib/utils'
 import SkeuoBtn from '@/components/SkeuoBtn'
+import TripForm from '@/components/TripForm'
 
 export default function Home() {
    const [locations, setLocations] = useState([])
-   const [preferences, setPreferences] = useState([])
-
-   const handlePreferences = e => {
-      const preference = e.target.innerText
-      if (preferences.includes(preference)) {
-         setPreferences(preferences.filter(p => p !== preference))
-      } else {
-         setPreferences([...preferences, preference])
-      }
-   }
-
-   useEffect(() => {
-      console.log(preferences)
-   }, [preferences])
+   const [proximity, setProximity] = useState({ lng: 0, lat: 0 })
 
    useEffect(() => {
       const places = [
@@ -31,15 +19,21 @@ export default function Home() {
             icon: '🛍️',
             place: 'Galeria Echo',
          },
+         {
+            icon: '🍔',
+            place: 'McDonalds al. Solidarności 16',
+         },
       ]
 
       const getLocations = async () => {
-         const locationPromises = places.map(el => getCoordinates(el.place))
+         const mainCity = await getProximity('Kielce')
+         const locationPromises = places.map(el => getCoordinates(el.place, mainCity))
          const locationsData = await Promise.all(locationPromises)
          locationsData.forEach((el, i) => {
             el.name = places[i].place
             el.icon = places[i].icon
          })
+
          setLocations(locationsData)
       }
 
@@ -49,14 +43,8 @@ export default function Home() {
    return (
       <main className='relative h-screen text-textColor text-2xl flex flex-col justify-center items-center'>
          {/* <Map locations={locations} /> */}
-         <div className='w-[95%] flex flex-wrap gap-2'>
-            <SkeuoBtn onClick={handlePreferences}>coffee</SkeuoBtn>
-            <SkeuoBtn onClick={handlePreferences}>nature</SkeuoBtn>
-            <SkeuoBtn onClick={handlePreferences}>parks</SkeuoBtn>
-            <SkeuoBtn onClick={handlePreferences}>museums</SkeuoBtn>
-            <SkeuoBtn onClick={handlePreferences}>art</SkeuoBtn>
-         </div>
-         <SkeuoBtn main>mapee</SkeuoBtn>
+         <TripForm />
+         <SkeuoBtn main>let's start</SkeuoBtn>
       </main>
    )
 }
