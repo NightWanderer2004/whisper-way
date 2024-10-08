@@ -10,11 +10,7 @@ import { useState } from 'react'
 const formSchema = z.object({
    city: z.string().min(2, { message: 'Enter city you want to visit' }).max(50),
    budget: z.coerce.number().int({ message: 'Must be int' }).positive({ message: 'Enter budget' }).min(1, { message: 'Enter budget' }),
-   people: z.coerce
-      .number()
-      .int({ message: 'Must be int' })
-      .positive({ message: 'Enter number of people' })
-      .min(1, { message: 'Enter number of people' }),
+   people: z.coerce.number().int({ message: 'Must be int' }).positive({ message: 'Enter num of people' }).min(1, { message: 'Enter num of people' }),
    preferences: z.string().min(1),
 })
 const preferencesList = [
