@@ -1,10 +1,16 @@
-import { DM_Sans } from 'next/font/google'
+import { DM_Sans, Lexend } from 'next/font/google'
 import localFont from 'next/font/local'
 
 export const dm_sans = DM_Sans({
    subsets: ['latin'],
    style: ['normal', 'italic'],
-   weight: '400',
+   weight: ['400', '600'],
+})
+
+export const lexend = Lexend({
+   subsets: ['latin'],
+   style: ['normal'],
+   weight: ['400', '600'],
 })
 
 export const e_ukraine = localFont({

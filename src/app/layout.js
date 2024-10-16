@@ -14,7 +14,7 @@ export const metadata = {
    },
    description: APP_DESCRIPTION,
    manifest: '/manifest.json',
-   appleWebApp: {
+   webApp: {
       capable: true,
       display: 'fullscreen',
       statusBarStyle: 'black-translucent',

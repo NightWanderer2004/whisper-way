@@ -3,16 +3,18 @@ import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { Skeleton } from './ui/skeleton'
 import { motion } from 'framer-motion'
+import { useTripStore } from '@/lib/useStore'
 
 mapboxgl.accessToken = process.env.MAP_KEY
 
 export default function Map({ locations }) {
+   const mainCityCoords = useTripStore(state => state.mainCityCoords)
    const map = useRef(null)
    const mapContainerRef = useRef(null)
    const [loading, setLoading] = useState(true)
 
-   const coords = [20.632208, 50.87181]
-   const zoom = 13
+   const coords = [mainCityCoords.lng, mainCityCoords.lat]
+   const zoom = 12
 
    useEffect(() => {
       if (!mapboxgl.supported()) {
@@ -37,18 +39,19 @@ export default function Map({ locations }) {
       if (locations && map.current) {
          document.querySelectorAll('.mapboxgl-marker').forEach(marker => marker.remove())
 
-         locations.forEach(location => {
-            const marker = document.createElement('div')
-            const icon = document.createElement('span')
-            marker.className = 'marker'
-            icon.className = 'icon'
-            icon.textContent = location.icon
-            marker.appendChild(icon)
-            new mapboxgl.Marker(marker)
-               .setLngLat([location.lng, location.lat])
-               .setPopup(new mapboxgl.Popup().setHTML(`<h4>${location.name}</h4>`))
-               .addTo(map.current)
-         })
+         Array.isArray(locations) &&
+            locations.map(location => {
+               const marker = document.createElement('div')
+               const icon = document.createElement('span')
+               marker.className = 'marker'
+               icon.className = 'icon'
+               icon.textContent = location.icon
+               marker.appendChild(icon)
+               new mapboxgl.Marker(marker)
+                  .setLngLat([location.lng, location.lat])
+                  .setPopup(new mapboxgl.Popup().setHTML(`<h4>${location.name}</h4>`))
+                  .addTo(map.current)
+            })
       }
    }, [locations])
 

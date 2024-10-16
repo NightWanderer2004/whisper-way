@@ -8,5 +8,6 @@ const withPWA = withPWAInit({
 export default withPWA({
    env: {
       MAP_KEY: process.env.MAP_KEY,
+      OPENAI: process.env.OPENAI,
    },
 })
