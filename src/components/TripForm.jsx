@@ -75,7 +75,7 @@ const currencies = [
 ]
 
 export default function TripForm({ isLoading, setIsLoading, setShowMap, setLocations }) {
-   const { setUserData, setMainCityCoords, updateTripData, setIsStart } = useTripStore()
+   const { setUserData, setMainCityCoords, updateTripData } = useTripStore()
    const [preferences, setPreferences] = useState([])
    const [preferencesError, setPreferencesError] = useState('')
 
@@ -104,7 +104,6 @@ export default function TripForm({ isLoading, setIsLoading, setShowMap, setLocat
       }
 
       setIsLoading(true)
-      setIsStart(false)
       try {
          const { city, budget, people, currency } = formData
          const userData = { ...formData, preferences }

@@ -39,6 +39,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, res
          <button
             onClick={() => {
                cleanStorage()
+               setShowInfoMobile(false)
                window.location.reload()
             }}
             className='text-textAccent text-xs flex items-center justify-center p-1 leading-none bg-whiteBg rounded-full border-2 border-white/30 shadow-smooth hover:bg-white/80 transition-colors duration-200'
