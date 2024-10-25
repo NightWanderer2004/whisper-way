@@ -137,7 +137,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, res
    return (
       <AnimatePresence mode='wait'>
          {/* Desktop Info Panel (always visible) */}
-         <div className='relative z-50 hidden md:block w-1/2 h-full bg-stone-100 overflow-y-auto backdrop-blur-md no-scrollbar border-r border-white/30'>
+         <div className='info-panel relative z-50 hidden md:block w-1/2 h-full bg-stone-100 overflow-y-auto backdrop-blur-md no-scrollbar border-r border-white/30'>
             <div className='p-5 space-y-8'>
                <div className='mt-4 flex items-center justify-between'>
                   {heading}

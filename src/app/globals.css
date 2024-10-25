@@ -35,6 +35,9 @@
       content: '';
       @apply absolute z-20 bg-[url(/img/pin-in.svg)] bg-no-repeat bg-contain opacity-75 w-[36px] h-[38.4px] rounded-[999%];
    }
+   .info-panel {
+      -webkit-backdrop-filter: blur(12px);
+   }
 
    .skeuo,
    .skeuo-white,
