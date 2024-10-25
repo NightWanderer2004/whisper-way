@@ -16,14 +16,13 @@ const slideAnimation = {
 
 export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, resetMapPosition }) {
    const { cleanStorage } = useTripStore()
-   const city = useTripStore(state => state.userData.city)
    const [localShowInfoMobile, setLocalShowInfoMobile] = useState(showInfoMobile)
 
    useEffect(() => {
       setLocalShowInfoMobile(showInfoMobile)
    }, [showInfoMobile])
 
-   const heading = <h2 className='text-3xl font-medium text-textAccent'>{city}</h2>
+   const heading = <h2 className='text-3xl font-medium text-textAccent'>{data.city}</h2>
 
    const controlButtons = (
       <div className='flex space-x-2'>
