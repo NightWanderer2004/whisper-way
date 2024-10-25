@@ -7,7 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 export default function Home() {
    const tripData = useTripStore(state => state.tripData)
-   const [isLoading, setIsLoading] = useState(true)
+   const [isLoading, setIsLoading] = useState(false)
    const [showMap, setShowMap] = useState(false)
    const [locations, setLocations] = useState(tripData.locations)
 
