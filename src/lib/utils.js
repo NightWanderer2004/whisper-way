@@ -35,24 +35,17 @@ export async function getCoordinates(placeName, cityInfo) {
    const { lng, lat } = cityInfo.coords
    const { country } = cityInfo
    const { min_lon, min_lat, max_lon, max_lat } = cityInfo.bbox
-   const responseSuggest = await fetch(
-      `https://api.mapbox.com/search/searchbox/v1/suggest?q=${encodeURIComponent(placeName)}&language=en&country=${country.toLowerCase()}&limit=1&proximity=${lng},${lat}&bbox=${min_lon},${min_lat},${max_lon},${max_lat}&session_token=2a48b7cb-d6d3-42b4-a9a1-60176a1bc0aa&access_token=${accessToken}`,
+
+   const responseCoords = await fetch(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(placeName)}.json?country=${country.toLowerCase()}&bbox=${min_lon},${min_lat},${max_lon},${max_lat}&limit=1&proximity=${lng},${lat}&access_token=${accessToken}`,
    )
-   const dataSuggest = await responseSuggest.json()
-   const placeId = dataSuggest.suggestions[0]?.mapbox_id
 
-   if (placeId) {
-      const responseCoords = await fetch(
-         `https://api.mapbox.com/search/searchbox/v1/retrieve/${placeId}?session_token=2a48b7cb-d6d3-42b4-a9a1-60176a1bc0aa&access_token=${accessToken}`,
-      )
+   const dataCoords = await responseCoords.json()
+   const coordinates = dataCoords.features[0].center
 
-      const dataCoords = await responseCoords.json()
-      const coordinates = dataCoords.features[0].properties.coordinates
-
-      return {
-         name: placeName,
-         lng: coordinates.longitude,
-         lat: coordinates.latitude,
-      }
-   } else return
+   return {
+      name: placeName,
+      lng: coordinates[0],
+      lat: coordinates[1],
+   }
 }

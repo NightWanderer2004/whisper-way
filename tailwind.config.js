@@ -28,9 +28,9 @@ module.exports = {
             'skeuo-active':
                'inset 0px 3px 10px 0.5px rgba(0, 0, 0, 22%), inset 0px 2px 1px 0.5px rgba(0, 0, 0, 60%), inset 0px 6px 14px -1.5px rgba(0, 0, 0, 60%), inset 0px -6px 8px -3.5px rgba(0, 0, 0, 25%)',
             'skeuo-white':
-               'inset 0px 3px 1px 0.5px rgba(255, 255, 255, 80%), inset 0px -1.5px 3px 0.5px rgba(0, 0, 0, 5%), inset 0px 11px 8px -3.5px rgba(255, 255, 255, 60%), inset 0px -6px 8px -3.5px rgba(0, 0, 0, 5%)',
+               'inset 0px 3px 1px 0.5px rgba(255, 255, 255, 80%), inset 0px -1.5px 3px 0.5px rgba(0, 0, 0, 2%), inset 0px 11px 8px -3.5px rgba(255, 255, 255, 60%), inset 0px -6px 8px -3.5px rgba(0, 0, 0, 3%)',
             'skeuo-white-active':
-               'inset 0px 5px 10px 0.5px rgba(0, 0, 0, 5%), inset 0px 2px 1px 0.5px rgba(0, 0, 0, 10%), inset 0px 6px 14px -1.5px rgba(0, 0, 0, 10%), inset 0px -6px 8px -3.5px rgba(0, 0, 0, 10%)',
+               'inset 0px 5px 10px 0.5px rgba(0, 0, 0, 2%), inset 0px 2px 1px 0.5px rgba(0, 0, 0, 2%), inset 0px 6px 14px -1.5px rgba(0, 0, 0, 2%), inset 0px -6px 8px -3.5px rgba(0, 0, 0, 2%)',
          },
          transitionTimingFunction: {
             gentle: 'cubic-bezier(0.47, 0, 0.23, 1.38)',

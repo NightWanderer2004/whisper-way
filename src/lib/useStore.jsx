@@ -16,7 +16,29 @@ export const useTripStore = create(set => ({
    tripData: {},
    updateTripData: newTripData => set(state => ({ tripData: { ...state.tripData, ...newTripData } })),
 
-   // increasePopulation: () => set(state => ({ bears: state.bears + 1 })),
-   // removeAllBears: () => set({ bears: 0 }),
-   // updateBears: newBears => set({ bears: newBears }),
+   initializeFromLocalStorage: () => {
+      const userData = JSON.parse(localStorage.getItem('userData') || '{}')
+      const mainCityCoords = JSON.parse(localStorage.getItem('mainCityCoords') || '{}')
+      const tripData = JSON.parse(localStorage.getItem('tripData') || '{}')
+      const locations = JSON.parse(localStorage.getItem('locations') || '[]')
+
+      set(state => ({
+         userData: { ...state.userData, ...userData },
+         mainCityCoords: { ...state.mainCityCoords, ...mainCityCoords },
+         tripData: { ...state.tripData, ...tripData, locations },
+      }))
+   },
+   cleanStorage: () => {
+      localStorage.removeItem('userData')
+      localStorage.removeItem('mainCityCoords')
+      localStorage.removeItem('tripData')
+      localStorage.removeItem('locations')
+
+      set({
+         userData: {},
+         mainCityCoords: {},
+         tripData: {},
+         locations: [],
+      })
+   },
 }))

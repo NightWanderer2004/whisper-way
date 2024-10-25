@@ -1,20 +1,24 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, useCallback } from 'react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
-import { Skeleton } from './ui/skeleton'
 import { motion } from 'framer-motion'
 import { useTripStore } from '@/lib/useStore'
+import BottomButton from './BottomButton'
+import InfoPanel from './InfoPanel'
 
 mapboxgl.accessToken = process.env.MAP_KEY
 
 export default function Map({ locations }) {
    const mainCityCoords = useTripStore(state => state.mainCityCoords)
+   const tripData = useTripStore(state => state.tripData)
+
    const map = useRef(null)
    const mapContainerRef = useRef(null)
    const [loading, setLoading] = useState(true)
+   const [showInfoMobile, setShowInfoMobile] = useState(false)
 
    const coords = mainCityCoords && mainCityCoords.lng && mainCityCoords.lat ? [mainCityCoords.lng, mainCityCoords.lat] : [0, 0]
-   const zoom = 12
+   const zoom = 12.5
 
    useEffect(() => {
       if (!mapboxgl.supported()) {
@@ -30,8 +34,10 @@ export default function Map({ locations }) {
          })
          map.current.on('load', () => {
             setLoading(false)
-            const skeleton = document.querySelector('.skeleton')
-            if (skeleton) skeleton.remove()
+            const logo = document.querySelector('#map-container > div.mapboxgl-control-container > div.mapboxgl-ctrl-bottom-left > div > a')
+            const info = document.querySelector('#map-container > div.mapboxgl-control-container > div.mapboxgl-ctrl-bottom-right')
+            if (logo) logo.remove()
+            if (info) info.remove()
          })
       }
    }, [])
@@ -60,16 +66,38 @@ export default function Map({ locations }) {
       }
    }, [locations])
 
+   const resetMapPosition = useCallback(() => {
+      if (map.current) {
+         map.current.flyTo({
+            center: coords,
+            zoom: zoom,
+            essential: true,
+            pitch: 0,
+         })
+      }
+   }, [coords, zoom])
+
+   const toggleInfoMobile = useCallback(() => {
+      setShowInfoMobile(prev => !prev)
+   }, [])
+
    return (
-      <div className='h-full w-full'>
-         <Skeleton className='skeleton h-full w-full' />
-         <motion.div
-            animate={{ opacity: loading ? 0 : 1, scale: loading ? 0.98 : 1 }}
-            transition={{ duration: 0.55, ease: 'backOut' }}
-            className='map opacity-0 h-full w-full'
-            id='map-container'
-            ref={mapContainerRef}
-         />
-      </div>
+      <motion.div
+         style={{ opacity: 0 }}
+         animate={{
+            opacity: loading ? 0 : 1,
+            scale: loading ? 0.98 : 1,
+         }}
+         transition={{ duration: 0.55, ease: 'backOut' }}
+         className='h-full w-full relative overflow-hidden flex flex-col md:flex-row'
+      >
+         <InfoPanel showInfoMobile={showInfoMobile} setShowInfoMobile={setShowInfoMobile} data={tripData} resetMapPosition={resetMapPosition} />
+         <div className='h-full w-full md:w-[70%]' id='map-container' ref={mapContainerRef} />
+
+         {/* Bottom button (visible only on mobile) */}
+         <div className='md:hidden'>
+            <BottomButton onClick={toggleInfoMobile}>{showInfoMobile ? 'Show Map' : 'Show Info'}</BottomButton>
+         </div>
+      </motion.div>
    )
 }

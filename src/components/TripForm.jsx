@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { useTripStore } from '@/lib/useStore'
 import { getCoordinates, getProximity } from '@/lib/utils'
 import { AnimatePresence, motion } from 'framer-motion'
+import BottomButton from './BottomButton'
 
 const openai = new OpenAI({
    apiKey: process.env.OPENAI,
@@ -74,7 +75,7 @@ const currencies = [
 ]
 
 export default function TripForm({ isLoading, setIsLoading, setShowMap, setLocations }) {
-   const { setUserData, setMainCityCoords } = useTripStore()
+   const { setUserData, setMainCityCoords, updateTripData, setIsStart } = useTripStore()
    const [preferences, setPreferences] = useState([])
    const [preferencesError, setPreferencesError] = useState('')
 
@@ -103,9 +104,12 @@ export default function TripForm({ isLoading, setIsLoading, setShowMap, setLocat
       }
 
       setIsLoading(true)
+      setIsStart(false)
       try {
          const { city, budget, people, currency } = formData
-         setUserData({ ...formData, preferences })
+         const userData = { ...formData, preferences }
+         setUserData(userData)
+         localStorage.setItem('userData', JSON.stringify(userData))
 
          const response = await openai.chat.completions.create({
             model: 'gpt-4o-mini',
@@ -140,8 +144,12 @@ export default function TripForm({ isLoading, setIsLoading, setShowMap, setLocat
          })
 
          const tripData = JSON.parse(response.choices[0].message.content)
+         updateTripData(tripData)
+         localStorage.setItem('tripData', JSON.stringify(tripData))
+
          const mainCityInfo = await getProximity(city)
          setMainCityCoords(mainCityInfo.coords)
+         localStorage.setItem('mainCityCoords', JSON.stringify(mainCityInfo.coords))
 
          const locationPromises = Object.keys(tripData.locations).map(location => getCoordinates(location, mainCityInfo))
          const resolvedLocations = await Promise.all(locationPromises)
@@ -149,8 +157,11 @@ export default function TripForm({ isLoading, setIsLoading, setShowMap, setLocat
          const formattedLocations = resolvedLocations.map((location, index) => ({
             ...location,
             name: Object.keys(tripData.locations)[index],
+            description: tripData.locations[Object.keys(tripData.locations)[index]].description,
             icon: tripData.locations[Object.keys(tripData.locations)[index]].icon,
          }))
+         updateTripData({ locations: formattedLocations })
+         localStorage.setItem('locations', JSON.stringify(formattedLocations))
 
          setLocations(formattedLocations)
          setShowMap(true)
@@ -163,7 +174,7 @@ export default function TripForm({ isLoading, setIsLoading, setShowMap, setLocat
 
    return (
       <Form {...form}>
-         <form onSubmit={form.handleSubmit(onSubmit)} className='max-w-[360px] space-y-6'>
+         <form onSubmit={form.handleSubmit(onSubmit)} className='max-w-[395px] space-y-6 px-3'>
             <FormField
                control={form.control}
                name='city'
@@ -290,11 +301,9 @@ export default function TripForm({ isLoading, setIsLoading, setShowMap, setLocat
                )}
             </div>
 
-            <div className='flex justify-center'>
-               <SkeuoBtn main type='submit' disabled={isLoading}>
-                  Generate Trip
-               </SkeuoBtn>
-            </div>
+            <BottomButton onClick={form.handleSubmit(onSubmit)} disabled={isLoading}>
+               Generate Trip
+            </BottomButton>
          </form>
       </Form>
    )
