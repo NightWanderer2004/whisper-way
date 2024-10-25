@@ -13,6 +13,7 @@ export async function getProximity(cityName) {
    const data = await response.json()
    const coordinates = data.features[0].properties.coordinates
    const country = data.features[0].properties.context.country.country_code
+   const bbox = data.features[0].properties.bbox
 
    return {
       coords: {
@@ -20,6 +21,12 @@ export async function getProximity(cityName) {
          lat: coordinates.latitude,
       },
       country,
+      bbox: {
+         min_lon: bbox[0],
+         min_lat: bbox[1],
+         max_lon: bbox[2],
+         max_lat: bbox[3],
+      },
    }
 }
 
@@ -27,8 +34,9 @@ export async function getCoordinates(placeName, cityInfo) {
    const accessToken = process.env.MAP_KEY
    const { lng, lat } = cityInfo.coords
    const { country } = cityInfo
+   const { min_lon, min_lat, max_lon, max_lat } = cityInfo.bbox
    const responseSuggest = await fetch(
-      `https://api.mapbox.com/search/searchbox/v1/suggest?q=${encodeURIComponent(placeName)}&language=en&country=${country.toLowerCase()}&limit=1&proximity=${lng},${lat}&session_token=2a48b7cb-d6d3-42b4-a9a1-60176a1bc0aa&access_token=${accessToken}`,
+      `https://api.mapbox.com/search/searchbox/v1/suggest?q=${encodeURIComponent(placeName)}&language=en&country=${country.toLowerCase()}&limit=1&proximity=${lng},${lat}&bbox=${min_lon},${min_lat},${max_lon},${max_lat}&session_token=2a48b7cb-d6d3-42b4-a9a1-60176a1bc0aa&access_token=${accessToken}`,
    )
    const dataSuggest = await responseSuggest.json()
    const placeId = dataSuggest.suggestions[0]?.mapbox_id

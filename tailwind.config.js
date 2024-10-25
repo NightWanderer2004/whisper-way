@@ -49,11 +49,6 @@ module.exports = {
                to: { height: '0' },
             },
          },
-         animation: {
-            rotation: 'rotation 15s linear infinite',
-            'accordion-down': 'accordion-down 0.2s ease-out',
-            'accordion-up': 'accordion-up 0.2s ease-out',
-         },
       },
    },
    plugins: [require('tailwindcss-animate'), require('tailwindcss-safe-area')],

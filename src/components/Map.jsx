@@ -13,7 +13,7 @@ export default function Map({ locations }) {
    const mapContainerRef = useRef(null)
    const [loading, setLoading] = useState(true)
 
-   const coords = [mainCityCoords.lng, mainCityCoords.lat]
+   const coords = mainCityCoords && mainCityCoords.lng && mainCityCoords.lat ? [mainCityCoords.lng, mainCityCoords.lat] : [0, 0]
    const zoom = 12
 
    useEffect(() => {
@@ -30,7 +30,8 @@ export default function Map({ locations }) {
          })
          map.current.on('load', () => {
             setLoading(false)
-            document.querySelector('.skeleton').remove()
+            const skeleton = document.querySelector('.skeleton')
+            if (skeleton) skeleton.remove()
          })
       }
    }, [])
@@ -40,17 +41,21 @@ export default function Map({ locations }) {
          document.querySelectorAll('.mapboxgl-marker').forEach(marker => marker.remove())
 
          Array.isArray(locations) &&
-            locations.map(location => {
-               const marker = document.createElement('div')
-               const icon = document.createElement('span')
-               marker.className = 'marker'
-               icon.className = 'icon'
-               icon.textContent = location.icon
-               marker.appendChild(icon)
-               new mapboxgl.Marker(marker)
-                  .setLngLat([location.lng, location.lat])
-                  .setPopup(new mapboxgl.Popup().setHTML(`<h4>${location.name}</h4>`))
-                  .addTo(map.current)
+            locations.forEach(location => {
+               if (location && location.lng && location.lat && location.name) {
+                  const marker = document.createElement('div')
+                  const icon = document.createElement('span')
+                  marker.className = 'marker'
+                  icon.className = 'icon'
+                  icon.textContent = location.icon || '📍'
+                  marker.appendChild(icon)
+                  new mapboxgl.Marker(marker)
+                     .setLngLat([location.lng, location.lat])
+                     .setPopup(new mapboxgl.Popup().setHTML(`<h4>${location.name}</h4>`))
+                     .addTo(map.current)
+               } else {
+                  console.warn('Invalid location data:', location)
+               }
             })
       }
    }, [locations])
