@@ -152,7 +152,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, res
             <motion.div
                key='info'
                {...slideAnimation}
-               className='absolute z-50 md:hidden bottom-0 left-0 pb-24 w-full h-full bg-whiteBg overflow-y-auto backdrop-blur-md no-scrollbar'
+               className='info-panel absolute z-50 md:hidden bottom-0 left-0 pb-24 w-full h-full bg-whiteBg overflow-y-auto backdrop-blur-md no-scrollbar'
             >
                <div className='p-5 space-y-8'>
                   <div className='mt-4 flex items-center justify-between'>
