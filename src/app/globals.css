@@ -38,6 +38,12 @@
    .info-panel {
       -webkit-backdrop-filter: blur(12px);
    }
+   .drawer-info-overlay {
+      -webkit-backdrop-filter: blur(4px);
+   }
+   .drawer-info {
+      -webkit-backdrop-filter: blur(28px);
+   }
 
    .skeuo,
    .skeuo-white,
