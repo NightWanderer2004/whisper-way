@@ -14,10 +14,10 @@ const slideAnimation = {
    },
 }
 
-export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, resetMapPosition }) {
+export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, userData, resetMapPosition }) {
    const { cleanStorage } = useTripStore()
    const [localShowInfoMobile, setLocalShowInfoMobile] = useState(showInfoMobile)
-   const city = useTripStore(state => state.userData.city)
+   const city = userData.city
 
    useEffect(() => {
       setLocalShowInfoMobile(showInfoMobile)

@@ -13,6 +13,7 @@ mapboxgl.accessToken = process.env.MAP_KEY
 
 export default function Map({ locations }) {
    const mainCityCoords = useTripStore(state => state.mainCityCoords)
+   const userData = useTripStore(state => state.userData)
    const tripData = useTripStore(state => state.tripData)
 
    const map = useRef(null)
@@ -87,7 +88,13 @@ export default function Map({ locations }) {
          transition={{ duration: 0.55, ease: 'backOut' }}
          className='h-full w-full relative overflow-hidden flex flex-col md:flex-row'
       >
-         <InfoPanel showInfoMobile={showInfoMobile} setShowInfoMobile={setShowInfoMobile} data={tripData} resetMapPosition={resetMapPosition} />
+         <InfoPanel
+            showInfoMobile={showInfoMobile}
+            setShowInfoMobile={setShowInfoMobile}
+            data={tripData}
+            userData={userData}
+            resetMapPosition={resetMapPosition}
+         />
          <div className='h-full w-full md:w-[60%]' id='map-container' ref={mapContainerRef} />
 
          <div className='md:hidden'>
