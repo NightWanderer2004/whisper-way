@@ -17,12 +17,13 @@ const slideAnimation = {
 export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, resetMapPosition }) {
    const { cleanStorage } = useTripStore()
    const [localShowInfoMobile, setLocalShowInfoMobile] = useState(showInfoMobile)
+   const city = useTripStore(state => state.userData.city)
 
    useEffect(() => {
       setLocalShowInfoMobile(showInfoMobile)
    }, [showInfoMobile])
 
-   const heading = <h2 className='text-3xl font-medium text-textAccent'>{data.city}</h2>
+   const heading = <h2 className='text-3xl font-medium text-textAccent'>{city}</h2>
 
    const controlButtons = (
       <div className='flex space-x-2'>
@@ -31,7 +32,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, res
                resetMapPosition()
                setShowInfoMobile(false)
             }}
-            className='text-textAccent text-xs flex items-center justify-center p-1 leading-none bg-whiteBg rounded-full border-2 border-white/30 shadow-smooth hover:bg-white/80 transition-colors duration-200'
+            className='text-textAccent/80 bg-lime-400/30 text-xs font-normal flex items-center justify-center p-1 px-1.5 leading-none rounded-full border-2 border-white/20 shadow-smooth hover:bg-lime-400/70 transition-colors duration-200'
          >
             reset position
          </button>
@@ -41,7 +42,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, res
                setShowInfoMobile(false)
                window.location.reload()
             }}
-            className='text-textAccent text-xs flex items-center justify-center p-1 leading-none bg-whiteBg rounded-full border-2 border-white/30 shadow-smooth hover:bg-white/80 transition-colors duration-200'
+            className='text-textAccent/80 bg-rose-400/30 text-xs font-normal flex items-center justify-center p-1 px-1.5 leading-none rounded-full border-2 border-white/20 shadow-smooth hover:bg-rose-400/70 transition-colors duration-200'
          >
             start over
          </button>
@@ -50,7 +51,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, res
 
    const content = data ? (
       <>
-         <Section title='Places'>
+         <Section title='Your spots'>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
                {Object.entries(data.locations || {}).map(([index, info]) => (
                   <InfoCard key={index} title={data.locations[index].name} icon={info.icon}>
@@ -61,7 +62,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, res
          </Section>
 
          {data.emergency_numbers && (
-            <Section title='Emergency Numbers'>
+            <Section title='Emergency numbers'>
                <div className='grid grid-cols-2 md:grid-cols-3 gap-3'>
                   {Object.entries(data.emergency_numbers).map(([service, info]) => (
                      <InfoCard key={service} title={service} icon={info.icon}>
@@ -72,10 +73,10 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, res
             </Section>
          )}
 
-         <Section title='General Information'>
+         <Section title='Useful info'>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
                {data.power_socket && (
-                  <InfoCard title='Power Socket' icon={data.power_socket.icon}>
+                  <InfoCard title='Power socket' icon={data.power_socket.icon}>
                      <p className='text-sm'>Type: {data.power_socket.type}</p>
                      <p className='text-sm'>Voltage: {data.power_socket.voltage}</p>
                   </InfoCard>
@@ -91,12 +92,12 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, res
                   </InfoCard>
                )}
                {data.best_season && (
-                  <InfoCard title='Best Season' icon={data.best_season.icon}>
+                  <InfoCard title='Best season' icon={data.best_season.icon}>
                      <p className='text-sm'>{data.best_season.season}</p>
                   </InfoCard>
                )}
                {data.payment_method && (
-                  <InfoCard title='Payment Method' icon={data.payment_method.icon}>
+                  <InfoCard title='Payment method' icon={data.payment_method.icon}>
                      <p className='text-sm'>{data.payment_method.info}</p>
                   </InfoCard>
                )}
@@ -107,10 +108,10 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, res
             <Section title='Prices'>
                {data.transport_prices && (
                   <>
-                     <h4 className='text-sm font-normal mb-2'>Transport Prices</h4>
+                     <h4 className='text-sm font-normal mb-2'>Transport</h4>
                      <div className='grid grid-cols-1 md:grid-cols-2 gap-3 mb-4'>
                         {Object.entries(data.transport_prices).map(([type, info]) => (
-                           <InfoCard key={type} title={type.charAt(0).toUpperCase() + type.slice(1)} icon={info.icon}>
+                           <InfoCard key={type} title={type.charAt(0).toUpperCase() + type.slice(1).split('_').join(' ')} icon={info.icon}>
                               <p className='text-sm'>{info.price}</p>
                            </InfoCard>
                         ))}
@@ -119,10 +120,10 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, res
                )}
                {data.average_prices && (
                   <>
-                     <h4 className='text-sm font-normal mb-2'>Average Prices</h4>
+                     <h4 className='text-sm font-normal mb-2'>Average</h4>
                      <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
                         {Object.entries(data.average_prices).map(([item, info]) => (
-                           <InfoCard key={item} title={item.charAt(0).toUpperCase() + item.slice(1)} icon={info.icon}>
+                           <InfoCard key={item} title={item.charAt(0).toUpperCase() + item.slice(1).split('_').join(' ')} icon={info.icon}>
                               <p className='text-sm'>{info.price}</p>
                            </InfoCard>
                         ))}
@@ -131,13 +132,25 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, res
                )}
             </Section>
          )}
+
+         {data.useful_apps && (
+            <Section title='Useful Apps'>
+               <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
+                  {Object.entries(data.useful_apps).map(([app, info]) => (
+                     <InfoCard key={app} title={app} icon='📱'>
+                        <p className='text-sm'>{info.description}</p>
+                     </InfoCard>
+                  ))}
+               </div>
+            </Section>
+         )}
       </>
    ) : null
 
    return (
-      <AnimatePresence mode='wait'>
+      <AnimatePresence>
          {/* Desktop Info Panel (always visible) */}
-         <div className='info-panel relative z-50 hidden md:block w-1/2 h-full bg-stone-100 overflow-y-auto backdrop-blur-md no-scrollbar border-r border-white/30'>
+         <div className='relative z-50 hidden md:block w-[30%] h-full bg-stone-100 overflow-y-auto backdrop-blur-md no-scrollbar border-r border-white/30'>
             <div className='p-5 space-y-8'>
                <div className='mt-4 flex items-center justify-between'>
                   {heading}

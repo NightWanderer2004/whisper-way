@@ -5,6 +5,9 @@ import { motion } from 'framer-motion'
 import { useTripStore } from '@/lib/useStore'
 import BottomButton from './BottomButton'
 import InfoPanel from './InfoPanel'
+import { TextMorph } from './TextMorph'
+import { AnimatedMarker } from './AnimatedMarker'
+import ReactDOM from 'react-dom/client'
 
 mapboxgl.accessToken = process.env.MAP_KEY
 
@@ -44,21 +47,14 @@ export default function Map({ locations }) {
 
    useEffect(() => {
       if (locations && map.current) {
+         // Remove existing markers
          document.querySelectorAll('.mapboxgl-marker').forEach(marker => marker.remove())
 
+         // Add new markers
          Array.isArray(locations) &&
-            locations.forEach(location => {
+            locations.forEach((location, index) => {
                if (location && location.lng && location.lat && location.name) {
-                  const marker = document.createElement('div')
-                  const icon = document.createElement('span')
-                  marker.className = 'marker'
-                  icon.className = 'icon'
-                  icon.textContent = location.icon || '📍'
-                  marker.appendChild(icon)
-                  new mapboxgl.Marker(marker)
-                     .setLngLat([location.lng, location.lat])
-                     .setPopup(new mapboxgl.Popup().setHTML(`<h4>${location.name}</h4>`))
-                     .addTo(map.current)
+                  ReactDOM.createRoot(document.createElement('div')).render(<AnimatedMarker location={location} map={map.current} index={index} />)
                } else {
                   console.warn('Invalid location data:', location)
                }
@@ -92,11 +88,12 @@ export default function Map({ locations }) {
          className='h-full w-full relative overflow-hidden flex flex-col md:flex-row'
       >
          <InfoPanel showInfoMobile={showInfoMobile} setShowInfoMobile={setShowInfoMobile} data={tripData} resetMapPosition={resetMapPosition} />
-         <div className='h-full w-full md:w-[70%]' id='map-container' ref={mapContainerRef} />
+         <div className='h-full w-full md:w-[60%]' id='map-container' ref={mapContainerRef} />
 
-         {/* Bottom button (visible only on mobile) */}
          <div className='md:hidden'>
-            <BottomButton onClick={toggleInfoMobile}>{showInfoMobile ? 'Show Map' : 'Show Info'}</BottomButton>
+            <BottomButton onClick={toggleInfoMobile}>
+               <TextMorph>{showInfoMobile ? 'map' : 'menu'}</TextMorph>
+            </BottomButton>
          </div>
       </motion.div>
    )
