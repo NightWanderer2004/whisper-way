@@ -95,7 +95,7 @@ export default function Map({ locations }) {
             userData={userData}
             resetMapPosition={resetMapPosition}
          />
-         <div className='h-full w-full md:w-[60%]' id='map-container' ref={mapContainerRef} />
+         <div className='h-full w-full md:w-[70%]' id='map-container' ref={mapContainerRef} />
 
          <div className='md:hidden'>
             <BottomButton onClick={toggleInfoMobile}>
