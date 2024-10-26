@@ -41,7 +41,7 @@ export async function getCoordinates(placeName, cityInfo) {
    )
 
    const dataCoords = await responseCoords.json()
-   const coordinates = dataCoords.features[0].center
+   const coordinates = dataCoords.features[0]?.center
 
    return {
       name: placeName,
