@@ -36,13 +36,13 @@
       @apply absolute z-20 bg-[url(/img/pin-in.svg)] bg-no-repeat bg-contain opacity-75 w-[36px] h-[38.4px] rounded-[999%];
    }
    .info-panel {
-      -webkit-backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(24px);
    }
    .drawer-info-overlay {
       -webkit-backdrop-filter: blur(4px);
    }
    .drawer-info {
-      -webkit-backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(24px);
    }
 
    .skeuo,
@@ -72,6 +72,59 @@
    .skeuo-white-active::before {
       @apply shadow-skeuo-white-active mix-blend-soft-light;
    }
+
+   .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.3;
+      animation: blob-movement 10s ease-in-out infinite;
+   }
+
+   .blob:nth-child(1) {
+      width: 200px;
+      height: 200px;
+      left: -90px;
+      top: -290px;
+      background: #d2ef9b;
+      animation-delay: 0s;
+   }
+
+   .blob:nth-child(2) {
+      width: 320px;
+      height: 320px;
+      right: -20px;
+      top: 20%;
+      background: #dbf6aa;
+      animation-delay: -3s;
+   }
+
+   .blob:nth-child(3) {
+      width: 300px;
+      height: 300px;
+      left: 15%;
+      bottom: -100px;
+      background: #cbeb8f;
+      animation-delay: -6s;
+   }
+
+   .blob:nth-child(4) {
+      width: 250px;
+      height: 250px;
+      left: 45%;
+      top: 40%;
+      background: #d9f99d;
+      animation-delay: -8s;
+   }
+
+   .blob:nth-child(5) {
+      width: 230px;
+      height: 230px;
+      left: 55%;
+      top: 10%;
+      background: #c3e485;
+      animation-delay: -2s;
+   }
 }
 
 html,
@@ -89,10 +142,21 @@ body {
    background-size: cover;
 }
 
+*::selection {
+   @apply bg-selectedBg text-textAccent;
+}
 * {
    -webkit-user-select: none; /* Safari */
    -ms-user-select: none; /* IE 10 and IE 11 */
    user-select: none; /* Standard syntax */
+}
+
+@media (min-width: 1024px) {
+   * {
+      -webkit-user-select: auto;
+      -ms-user-select: auto;
+      user-select: auto;
+   }
 }
 
 input::-webkit-outer-spin-button,
@@ -119,57 +183,4 @@ input[type='number'] {
    75% {
       transform: translate(300px, -190px) scale(1.1);
    }
-}
-
-.blob {
-   position: absolute;
-   border-radius: 50%;
-   filter: blur(60px);
-   opacity: 0.3;
-   animation: blob-movement 10s ease-in-out infinite;
-}
-
-.blob:nth-child(1) {
-   width: 200px;
-   height: 200px;
-   left: -90px;
-   top: -290px;
-   background: #d2ef9b;
-   animation-delay: 0s;
-}
-
-.blob:nth-child(2) {
-   width: 320px;
-   height: 320px;
-   right: -20px;
-   top: 20%;
-   background: #dbf6aa;
-   animation-delay: -3s;
-}
-
-.blob:nth-child(3) {
-   width: 300px;
-   height: 300px;
-   left: 15%;
-   bottom: -100px;
-   background: #cbeb8f;
-   animation-delay: -6s;
-}
-
-.blob:nth-child(4) {
-   width: 250px;
-   height: 250px;
-   left: 45%;
-   top: 40%;
-   background: #d9f99d;
-   animation-delay: -8s;
-}
-
-.blob:nth-child(5) {
-   width: 230px;
-   height: 230px;
-   left: 55%;
-   top: 10%;
-   background: #c3e485;
-   animation-delay: -2s;
 }

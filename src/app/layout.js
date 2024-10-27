@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils'
 import { e_ukraine } from './fonts'
 import './globals.css'
+import { Toaster } from '@/components/ui/sonner'
 
 const APP_NAME = 'Travel Mate'
 const APP_DEFAULT_TITLE = 'Travel Mate'
@@ -42,6 +43,7 @@ export default function RootLayout({ children }) {
             <link rel='apple-touch-startup-image' href='/startup.jpg' media='(device-width: 375px)' />
          </head>
          <body className={cn(e_ukraine.className)}>{children}</body>
+         <Toaster richColors />
       </html>
    )
 }

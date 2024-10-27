@@ -13,7 +13,6 @@ mapboxgl.accessToken = process.env.MAP_KEY
 
 export default function Map({ locations }) {
    const mainCityCoords = useTripStore(state => state.mainCityCoords)
-   const userData = useTripStore(state => state.userData)
    const tripData = useTripStore(state => state.tripData)
 
    const map = useRef(null)
@@ -55,7 +54,11 @@ export default function Map({ locations }) {
          Array.isArray(locations) &&
             locations.forEach((location, index) => {
                if (location && location.lng && location.lat && location.name) {
-                  ReactDOM.createRoot(document.createElement('div')).render(<AnimatedMarker location={location} map={map.current} index={index} />)
+                  const markerElement = document.createElement('div')
+                  const root = ReactDOM.createRoot(markerElement)
+                  root.render(<AnimatedMarker location={location} map={map.current} index={index} />)
+
+                  new mapboxgl.Marker(markerElement).setLngLat([location.lng, location.lat]).addTo(map.current)
                } else {
                   console.warn('Invalid location data:', location)
                }
@@ -74,6 +77,15 @@ export default function Map({ locations }) {
       }
    }, [coords, zoom])
 
+   const setMapPosition = useCallback(
+      coords => {
+         if (map.current) {
+            map.current.flyTo({ center: coords, zoom: 15, essential: true, pitch: 0 })
+         }
+      },
+      [zoom],
+   )
+
    const toggleInfoMobile = useCallback(() => {
       setShowInfoMobile(prev => !prev)
    }, [])
@@ -86,18 +98,18 @@ export default function Map({ locations }) {
             scale: loading ? 0.98 : 1,
          }}
          transition={{ duration: 0.55, ease: 'backOut' }}
-         className='h-full w-full relative overflow-hidden flex flex-col md:flex-row'
+         className='h-full w-full relative overflow-hidden flex flex-col lg:flex-row'
       >
          <InfoPanel
             showInfoMobile={showInfoMobile}
             setShowInfoMobile={setShowInfoMobile}
             data={tripData}
-            userData={userData}
+            setMapPosition={setMapPosition}
             resetMapPosition={resetMapPosition}
          />
-         <div className='h-full w-full md:w-[70%]' id='map-container' ref={mapContainerRef} />
+         <div className='h-full w-full md:w-[60%] xl:w-[70%]' id='map-container' ref={mapContainerRef} />
 
-         <div className='md:hidden'>
+         <div className='lg:hidden'>
             <BottomButton onClick={toggleInfoMobile}>
                <TextMorph>{showInfoMobile ? 'map' : 'menu'}</TextMorph>
             </BottomButton>

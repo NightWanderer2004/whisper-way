@@ -1,7 +1,7 @@
 'use client'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import SkeuoBtn from './SkeuoBtn'
@@ -12,6 +12,7 @@ import { useTripStore } from '@/lib/useStore'
 import { getCoordinates, getProximity } from '@/lib/utils'
 import { AnimatePresence, motion } from 'framer-motion'
 import BottomButton from './BottomButton'
+import { toast } from 'sonner'
 
 const openai = new OpenAI({
    apiKey: process.env.OPENAI,
@@ -61,7 +62,7 @@ const currencies = [
    { value: 'ZAR', label: 'R' },
 ]
 
-export default function TripForm({ isLoading, setIsLoading, setShowMap, setLocations }) {
+export default function TripForm({ isLoading, setIsLoading, setLocations }) {
    const { setUserData, setMainCityCoords, updateTripData } = useTripStore()
    const [preferences, setPreferences] = useState([])
    const [preferencesError, setPreferencesError] = useState('')
@@ -105,7 +106,7 @@ export default function TripForm({ isLoading, setIsLoading, setShowMap, setLocat
                   content: [
                      {
                         type: 'text',
-                        text: 'Create a prompt to generate travel recommendations based on a given city, budget, and preferences. \n\nInclude relevant location details and country information. \n\n# Steps\n\n1. **Input Analysis**: Determine the travel destination, budget, and personal preferences provided by the user.\n2. **Research and Selection**: \n   - Find destinations and locations within the specified city that align with the user\'s preferences.\n   - Consider the budget constraints when selecting locations.\n   - Include notable attractions, activities, or experiences that fit the criteria.\n3. **Country Information**: \n   - Provide a brief overview of the country where the city is located.\n   - Include emergency numbers, power socket type,  transport prices, local currency, timezone, best season to visit, payment method, useful apps as relevant to a traveler.\n\n# Output Format\n\nThe output should be a JSON file of points that includes:\n- A list of recommended locations and activities within the city with a emoji "icon".\n- A summary of the country\'s relevant information.\n\n# Examples \n\n**Input**: \n- City: [Tokyo]\n- Budget: [9000 zł]\n- People: [2 love couple]\n- Preferences: [coffee, parks, art]\n\n**Output**: \n{\n  "locations": {\n    "Shibuya Crossing": {\n      "description": "Famous bustling intersection with vibrant lights, perfect for a coffee stop nearby.",\n      "icon": "🌆"\n    },\n    "Yoyogi Park": {\n      "description": "Large park near Harajuku, great for a relaxing walk or a picnic with coffee.",\n      "icon": "🌳"\n    },\n    "Meiji Jingu Shrine": {\n      "description": "Historical and spiritual site, located in a forested park near Yoyogi.",\n      "icon": "⛩️"\n    },\n    "Mori Art Museum": {\n      "description": "Contemporary art museum with stunning views from Roppongi Hills.",\n      "icon": "🖼️"\n    }\n  },\n  "emergency_numbers": {\n    "police": {\n      "number": "110",\n      "icon": "🚓"\n    },\n    "ambulance": {\n      "number": "119",\n      "icon": "🚑"\n    },\n    "fire_service": {\n      "number": "119",\n      "icon": "🚒"\n    }\n  },\n  "power_socket": {\n    "type": "A and B",\n    "voltage": "100V",\n    "icon": "🔌"\n  },\n  "transport_prices": {\n    "metro": {\n      "price": "170–320 JPY (5.60–10.50 PLN) depending on distance",\n      "icon": "🚇"\n    },\n    "public_transport": {\n      "price": "170–320 JPY (5.60–10.50 PLN) for buses and trains",\n      "icon": "🚌"\n    },\n    "taxi": {\n      "price": "420 JPY (13.80 PLN) for the first 1 km, then 80 JPY (2.60 PLN) per additional 237m",\n      "icon": "🚖"\n    }\n  },\n  "currency": {\n    "name": "Japanese Yen (JPY)",\n    "icon": "💴"\n  },\n  "average_prices": {\n    "coffee": {\n      "price": "400–600 JPY (13–19 PLN)",\n      "icon": "☕"\n    },\n    "grocery_set": {\n      "price": "2500 JPY (66 PLN) for basic groceries like bread, eggs, milk, etc.",\n      "icon": "🛒"\n    }\n  },\n  "timezone": {\n    "name": "GMT+9",\n    "icon": "🕒"\n  },\n  "best_season": {\n    "season": "Spring (March to May) and Autumn (September to November)",\n    "icon": "🌸🍂"\n  },\n  "payment_method": {\n    "info": "Credit cards are widely accepted, but having some cash is recommended, especially in small shops.",\n    "icon": "💳💵"\n  },\n  "useful_apps": {"Suica":{"description":"App for easy cashless travel across public transport and payments in stores."},"Japan Official Travel App":{"description":"Tourist information app offering guides and tips."},"GuruNavi":{"description":"Food guide app to discover restaurants and coffee shops."}}\n}\n\n\n# Notes\n- Description of places should be short (about 8-12 words)\n- Don\'t recommend a map and other travel apps\n- Consider budget and how they influence location recommendations.\n- Address cultural, historical, and recreational aspects when providing country information.\n- Respond me only JSON.\n- Useful apps should not be nested inside each other.\n- Give really good and useful apps, around 3-5 apps and match icon. \n- Generate at least 8 locations around city area. \n- Use locations name that Mapbox Searchbox can recognise.',
+                        text: '### Create a Prompt to Generate Travel Recommendations\n\n**Objective**: Generate travel recommendations based on a given city, budget, and preferences. \n\n**Details to Include**:\n- Relevant location details\n- Country information\n\n---\n\n### Steps\n\n1. **Input Analysis**: \n   - Determine the travel destination, budget, and personal preferences provided by the user.\n\n2. **Research and Selection**: \n   - Find destinations and locations within the specified city that align with the user’s preferences.\n   - Consider budget constraints when selecting locations.\n   - Include notable attractions, activities, or experiences that fit the criteria.\n\n3. **Country Information**: \n   - Provide a brief overview of the country where the city is located.\n   - Include emergency numbers, power socket type, transport prices, local currency, timezone, best season to visit, payment methods, and useful apps for travelers.\n\n---\n\n### Output Format\n\nThe output should be a JSON file that includes:\n- A list of recommended locations and activities within the city, each with an emoji “icon.”\n- A summary of the country’s relevant information.\n\n---\n\n### Example\n\n**Input**:\n- City: [Tokyo]\n- Budget: [9000 zł]\n- People: [2 love couple]\n- Preferences: [coffee, parks, art]\n\n**Output**:\n```json\n{\n  "locations": [\n    {\n      "name": "Shibuya Crossing",\n      "address": "1-23-10, Tokyo, Tokyo Prefecture 150-0041, Japan",\n      "description": "Famous bustling intersection with vibrant lights, perfect for a coffee stop nearby.",\n      "icon": "🌆"\n    },\n    {\n      "name": "Yoyogi Park",\n      "address": "2, Tokyo, Tokyo Prefecture 151-0052, Japan",\n      "description": "Large park near Harajuku, great for a relaxing walk or a picnic with coffee.",\n      "icon": "🌳"\n    },\n    {\n      "name": "Meiji Jingu Shrine",\n      "address": "1-1, Tokyo, Tokyo Prefecture 151-0052, Japan",\n      "description": "Historical and spiritual site, located in a forested park near Yoyogi.",\n      "icon": "⛩️"\n    },\n    {\n      "name": "Mori Art Museum",\n      "address": "6-10-1, Tokyo, Tokyo Prefecture 106-6124, Japan",\n      "description": "Contemporary art museum with stunning views from Roppongi Hills.",\n      "icon": "🖼️"\n    }\n  ]\n},\n  "emergency_numbers": {\n    "police": {\n      "number": "110",\n      "icon": "🚓"\n    },\n    "ambulance": {\n      "number": "119",\n      "icon": "🚑"\n    },\n    "fire_service": {\n      "number": "119",\n      "icon": "🚒"\n    }\n  },\n  "power_socket": {\n    "type": "A and B",\n    "voltage": "100V",\n    "icon": "🔌"\n  },\n  "transport_prices": {\n    "metro": {\n      "price": "170–320 JPY (5.60–10.50 PLN) depending on distance",\n      "icon": "🚇"\n    },\n    "public_transport": {\n      "price": "170–320 JPY (5.60–10.50 PLN) for buses and trains",\n      "icon": "🚌"\n    },\n    "taxi": {\n      "price": "420 JPY (13.80 PLN) for the first 1 km, then 80 JPY (2.60 PLN) per additional 237m",\n      "icon": "🚖"\n    }\n  },\n  "currency": {\n    "name": "Japanese Yen (JPY)",\n    "icon": "💴"\n  },\n  "average_prices": {\n    "coffee": {\n      "price": "400–600 JPY (13–19 PLN)",\n      "icon": "☕"\n    },\n    "grocery_set": {\n      "price": "2500 JPY (66 PLN) for basic groceries like bread, eggs, milk, etc.",\n      "icon": "🛒"\n    }\n  },\n  "timezone": {\n    "name": "GMT+9",\n    "icon": "🕒"\n  },\n  "best_season": {\n    "season": "Spring (March to May) and Autumn (September to November)",\n    "icon": "🌸🍂"\n  },\n  "payment_method": {\n    "info": "Credit cards are widely accepted, but having some cash is recommended, especially in small shops.",\n    "icon": "💳💵"\n  },\n  "useful_apps": {\n    "Suica": {\n      "description": "App for easy cashless travel across public transport and payments in stores.",\n      "icon": "🚊"\n    },\n    "Tokyo Metro Subway Map": {\n      "description": "The map covers the Tokyo Metro lines, Toei lines and JR Yamanote line.",\n      "icon": "🚇"\n    },\n    "Safety tips": {\n      "description": "Find out the latest disaster information including early earthquake warnings, tsunam, volcanic activity",\n      "icon": "🦺"\n    }\n  }\n}\n```\n\n---\n\n### Notes\n- Description of places should be brief (8-12 words).\n- Avoid recommending mapping or travel apps.\n- Ensure locations recommended are budget-friendly.\n- Address cultural, historical, and recreational aspects in country information.\n- Respond only with JSON format.\n- Useful apps should not be nested; list 3-5 with matching icons.\n- Generate at least 8 unique locations within the city.\n- Use names recognizable by Mapbox Searchbox.\n- Use street addresses for coordinates but names for display in the app.',
                      },
                   ],
                },
@@ -137,22 +138,27 @@ export default function TripForm({ isLoading, setIsLoading, setShowMap, setLocat
          setMainCityCoords(mainCityInfo.coords)
          localStorage.setItem('mainCityCoords', JSON.stringify(mainCityInfo.coords))
 
-         const locationPromises = Object.keys(tripData.locations).map(location => getCoordinates(location, mainCityInfo))
+         const locationPromises = tripData.locations.map(location =>
+            getCoordinates(location, mainCityInfo).catch(error => {
+               console.warn(`Failed to get coordinates for ${location.name}:`, error)
+               return null
+            }),
+         )
          const resolvedLocations = await Promise.all(locationPromises)
 
-         const formattedLocations = resolvedLocations.map((location, index) => ({
-            ...location,
-            name: Object.keys(tripData.locations)[index],
-            description: tripData.locations[Object.keys(tripData.locations)[index]].description,
-            icon: tripData.locations[Object.keys(tripData.locations)[index]].icon,
-         }))
+         const formattedLocations = resolvedLocations.filter(Boolean)
+
+         if (formattedLocations.length === 0) {
+            throw new Error('No valid locations found')
+         }
+
          updateTripData({ locations: formattedLocations })
          localStorage.setItem('locations', JSON.stringify(formattedLocations))
 
          setLocations(formattedLocations)
-         setShowMap(true)
       } catch (error) {
          console.error('Error fetching trip data:', error)
+         toast.error('Failed to generate trip. Please try again.')
       } finally {
          setIsLoading(false)
       }
@@ -287,7 +293,7 @@ export default function TripForm({ isLoading, setIsLoading, setShowMap, setLocat
                )}
             </div>
 
-            <BottomButton onClick={form.handleSubmit(onSubmit)} disabled={isLoading}>
+            <BottomButton isForm={true} onClick={form.handleSubmit(onSubmit)} disabled={isLoading}>
                Generate Trip
             </BottomButton>
          </form>

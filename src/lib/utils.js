@@ -30,22 +30,26 @@ export async function getProximity(cityName) {
    }
 }
 
-export async function getCoordinates(placeName, cityInfo) {
+export async function getCoordinates(locationData, cityInfo) {
    const accessToken = process.env.MAP_KEY
    const { lng, lat } = cityInfo.coords
    const { country } = cityInfo
    const { min_lon, min_lat, max_lon, max_lat } = cityInfo.bbox
 
    const responseCoords = await fetch(
-      `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(placeName)}.json?country=${country.toLowerCase()}&bbox=${min_lon},${min_lat},${max_lon},${max_lat}&limit=1&proximity=${lng},${lat}&access_token=${accessToken}`,
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(locationData.address)}.json?country=${country.toLowerCase()}&bbox=${min_lon},${min_lat},${max_lon},${max_lat}&limit=1&proximity=${lng},${lat}&access_token=${accessToken}`,
    )
 
    const dataCoords = await responseCoords.json()
-   const coordinates = dataCoords.features[0]?.center
+   if (dataCoords.features.length == 0) return
 
+   const coordinates = dataCoords.features[0].center
    return {
-      name: placeName,
-      lng: coordinates[0],
-      lat: coordinates[1],
+      name: locationData.name,
+      address: locationData.address,
+      description: locationData.description,
+      icon: locationData.icon,
+      lng: coordinates[0] || null,
+      lat: coordinates[1] || null,
    }
 }
