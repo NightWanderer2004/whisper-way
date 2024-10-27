@@ -211,7 +211,7 @@ const InfoCard = ({ setMapPosition, setShowInfoMobile, title, icon, children, co
          setMapPosition && 'cursor-pointer',
       )}
    >
-      <h4 className='text-sm sm:text-base lg:text-sm font-normal flex items-center mb-1'>
+      <h4 className='text-sm sm:text-base lg:text-sm font-normal flex items-start mb-1'>
          <span className='mr-2'>{icon}</span>
          {title}
       </h4>
