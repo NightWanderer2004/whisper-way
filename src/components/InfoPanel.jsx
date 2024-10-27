@@ -15,9 +15,9 @@ const slideAnimation = {
 }
 
 export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, setMapPosition, resetMapPosition }) {
-   const { cleanStorage } = useTripStore()
+   const { cleanStorage, setShowMap } = useTripStore()
+   const { initializeFromLocalStorage } = useTripStore()
    const [localShowInfoMobile, setLocalShowInfoMobile] = useState(showInfoMobile)
-   const initializeFromLocalStorage = useTripStore(state => state.initializeFromLocalStorage)
    const city = useTripStore(state => state.userData.city)
 
    useEffect(() => {
@@ -32,7 +32,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
          <button
             onClick={() => {
                resetMapPosition()
-               setShowInfoMobile(false)
+               setLocalShowInfoMobile(false)
             }}
             className='text-textAccent/80 bg-lime-400/30 text-xs font-normal flex items-center justify-center p-1 px-1.5 leading-none rounded-full border-2 border-white/20 shadow-smooth hover:bg-lime-400/70 transition-colors duration-200'
          >
@@ -41,8 +41,8 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
          <button
             onClick={() => {
                cleanStorage()
-               setShowInfoMobile(false)
-               window.location.reload()
+               setShowMap(false)
+               setLocalShowInfoMobile(false)
             }}
             className='text-textAccent/80 bg-rose-400/30 text-xs font-normal flex items-center justify-center p-1 px-1.5 leading-none rounded-full border-2 border-white/20 shadow-smooth hover:bg-rose-400/70 transition-colors duration-200'
          >
@@ -206,9 +206,9 @@ const InfoCard = ({ setMapPosition, setShowInfoMobile, title, icon, children, co
          }
       }}
       className={cn(
-         'bg-whiteBg p-3 text-textColor rounded-xl border border-white/30 shadow-smooth',
+         'p-3 text-textColor rounded-2xl accent-fill shadow-smooth skeuo-white relative',
          lexend.className,
-         setMapPosition && 'cursor-pointer',
+         setMapPosition && 'cursor-pointer hover:scale-105 hover:text-textAccent transition-all duration-300',
       )}
    >
       <h4 className='text-sm sm:text-base lg:text-sm font-normal flex items-start mb-1'>

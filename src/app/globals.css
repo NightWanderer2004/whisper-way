@@ -16,7 +16,7 @@
 
 @layer components {
    .accent-fill {
-      @apply bg-whiteBg/60 border-2 border-white/30;
+      @apply bg-whiteBg/60 border border-white/30;
    }
 
    .marker {
@@ -35,6 +35,7 @@
       content: '';
       @apply absolute z-20 bg-[url(/img/pin-in.svg)] bg-no-repeat bg-contain opacity-75 w-[36px] h-[38.4px] rounded-[999%];
    }
+
    .info-panel {
       -webkit-backdrop-filter: blur(24px);
    }

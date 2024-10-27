@@ -7,7 +7,7 @@ import { useTripStore } from '@/lib/useStore'
 import { TextShimmer } from '@/components/ui/textshimmer'
 
 export default function Home() {
-   const { initializeFromLocalStorage } = useTripStore()
+   const { initializeFromLocalStorage, showMap } = useTripStore()
    const [isLoading, setIsLoading] = useState(false)
    const [locations, setLocations] = useState([])
 
@@ -49,7 +49,7 @@ export default function Home() {
                   </motion.div>
                </AnimatePresence>
             </div>
-         ) : locations.length > 0 ? (
+         ) : showMap ? (
             <Map locations={locations} />
          ) : (
             <motion.div
