@@ -54,7 +54,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
    const content = data ? (
       <>
          <Section title='Your spots'>
-            <div className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
                {data.locations.map((location, index) => (
                   <InfoCard
                      key={index}
@@ -72,7 +72,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
 
          {data.emergency_numbers && (
             <Section title='Emergency numbers'>
-               <div className='grid grid-cols-2 lg:grid-cols-3 gap-3'>
+               <div className='grid grid-cols-2 md:grid-cols-3 gap-3'>
                   {Object.entries(data.emergency_numbers).map(([service, info]) => (
                      <InfoCard key={service} title={service.charAt(0).toUpperCase() + service.slice(1).split('_').join(' ')} icon={info.icon}>
                         {info.number}
@@ -83,7 +83,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
          )}
 
          <Section title='Useful info'>
-            <div className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
                {data.power_socket && (
                   <InfoCard title='Power socket' icon={data.power_socket.icon}>
                      Type: {data.power_socket.type}
@@ -119,7 +119,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
                {data.transport_prices && (
                   <>
                      <h4 className='text-sm font-normal mb-2'>Transport</h4>
-                     <div className='grid grid-cols-1 lg:grid-cols-2 gap-3 mb-4'>
+                     <div className='grid grid-cols-1 md:grid-cols-2 gap-3 mb-4'>
                         {Object.entries(data.transport_prices).map(([type, info]) => (
                            <InfoCard key={type} title={type.charAt(0).toUpperCase() + type.slice(1).split('_').join(' ')} icon={info.icon}>
                               {info.price}
@@ -131,7 +131,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
                {data.average_prices && (
                   <>
                      <h4 className='text-sm font-normal mb-2'>Average</h4>
-                     <div className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
+                     <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
                         {Object.entries(data.average_prices).map(([item, info]) => (
                            <InfoCard key={item} title={item.charAt(0).toUpperCase() + item.slice(1).split('_').join(' ')} icon={info.icon}>
                               {info.price}
@@ -145,7 +145,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
 
          {data.useful_apps && (
             <Section title='Useful Apps'>
-               <div className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
+               <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
                   {Object.entries(data.useful_apps).map(([app, info]) => (
                      <InfoCard key={app} title={app} icon='📱'>
                         {info.description}
@@ -160,7 +160,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
    return (
       <AnimatePresence>
          {/* Desktop Info Panel (always visible) */}
-         <div className='relative z-50 hidden lg:block lg:w-[40%] xl:w-[30%] h-full overflow-x-hidden bg-stone-100 overflow-y-auto no-scrollbar border-r border-white/30'>
+         <div className='relative z-50 hidden md:block lg:w-[40%] xl:w-[30%] h-full overflow-x-hidden bg-stone-100 overflow-y-auto no-scrollbar border-r border-white/30'>
             <div className='p-5 space-y-8'>
                <div className='mt-4 flex items-center justify-between'>
                   {heading}
@@ -175,7 +175,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
             <motion.div
                key='info'
                {...slideAnimation}
-               className='info-panel absolute z-50 lg:hidden bottom-0 left-0 pb-24 w-full h-full overflow-x-hidden bg-whiteBg overflow-y-auto backdrop-blur-xl no-scrollbar'
+               className='info-panel absolute z-50 md:hidden bottom-0 left-0 pb-24 w-full h-full overflow-x-hidden bg-whiteBg overflow-y-auto backdrop-blur-xl no-scrollbar'
             >
                <div className='p-5 pt-16 space-y-8'>
                   <div className='mt-4 flex items-center justify-between'>
@@ -192,7 +192,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
 
 const Section = ({ title, children }) => (
    <section>
-      <h3 className='text-xl sm:text-2xl lg:text-xl font-normal mb-2 text-textAccent'>{title}</h3>
+      <h3 className='text-xl sm:text-2xl md:text-xl font-normal mb-2 text-textAccent'>{title}</h3>
       {children}
    </section>
 )
@@ -208,13 +208,13 @@ const InfoCard = ({ setMapPosition, setShowInfoMobile, title, icon, children, co
       className={cn(
          'p-3 text-textColor rounded-2xl accent-fill shadow-smooth skeuo-white relative',
          lexend.className,
-         setMapPosition && 'cursor-pointer hover:scale-105 hover:text-textAccent transition-all duration-300',
+         setMapPosition && 'cursor-pointer hover:scale-[103%] hover:text-textAccent transition-all duration-300',
       )}
    >
-      <h4 className='text-sm sm:text-base lg:text-sm font-normal flex items-start mb-1'>
+      <h4 className='text-sm sm:text-base md:text-sm font-normal flex items-start mb-1'>
          <span className='mr-2'>{icon}</span>
          {title}
       </h4>
-      <p className='text-sm sm:text-base lg:text-sm'>{children}</p>
+      <p className='text-sm sm:text-base md:text-sm'>{children}</p>
    </div>
 )
