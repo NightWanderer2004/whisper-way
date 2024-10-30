@@ -2,7 +2,7 @@
    "name": "Travel Mate",
    "short_name": "Travel Mate",
    "start_url": "/",
-   "display": "standalone",
+   "display": "fullscreen",
    "orientation": "any",
    "theme_color": "#ffffff",
    "background_color": "#ffffff",
