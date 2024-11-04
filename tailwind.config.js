@@ -20,7 +20,7 @@ module.exports = {
             textColor: '#737373',
          },
          backgroundImage: {
-            'main-gradient': "url('/gradient.jpg')",
+            'main-gradient': 'url("/gradient.jpg")',
          },
          boxShadow: {
             smooth: '0px 0.5px 2px 1px rgba(0, 0, 0, 5%)',
@@ -37,17 +37,33 @@ module.exports = {
          },
          keyframes: {
             rotation: {
-               '0%': { rotate: '0deg' },
-               '100%': { rotate: '360deg' },
+               '0%': {
+                  rotate: '0deg',
+               },
+               '100%': {
+                  rotate: '360deg',
+               },
             },
             'accordion-down': {
-               from: { height: '0' },
-               to: { height: 'var(--radix-accordion-content-height)' },
+               from: {
+                  height: '0',
+               },
+               to: {
+                  height: 'var(--radix-accordion-content-height)',
+               },
             },
             'accordion-up': {
-               from: { height: 'var(--radix-accordion-content-height)' },
-               to: { height: '0' },
+               from: {
+                  height: 'var(--radix-accordion-content-height)',
+               },
+               to: {
+                  height: '0',
+               },
             },
+         },
+         animation: {
+            'accordion-down': 'accordion-down 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.1)',
+            'accordion-up': 'accordion-up 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.1)',
          },
       },
    },

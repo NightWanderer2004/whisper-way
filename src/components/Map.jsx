@@ -22,6 +22,8 @@ export default function Map({ locations }) {
 
    const coords = mainCityCoords && mainCityCoords.lng && mainCityCoords.lat ? [mainCityCoords.lng, mainCityCoords.lat] : [0, 0]
    const zoom = 12.5
+   const maxZoom = 18
+   const minZoom = 11
 
    useEffect(() => {
       if (!mapboxgl.supported()) {
@@ -34,13 +36,15 @@ export default function Map({ locations }) {
             container: mapContainerRef.current,
             center: coords,
             zoom: zoom,
+            maxZoom: maxZoom,
+            minZoom: minZoom,
          })
          map.current.on('load', () => {
             setLoading(false)
             const logo = document.querySelector('#map-container > div.mapboxgl-control-container > div.mapboxgl-ctrl-bottom-left > div > a')
             const info = document.querySelector('#map-container > div.mapboxgl-control-container > div.mapboxgl-ctrl-bottom-right')
-            if (logo) logo.remove()
-            if (info) info.remove()
+            if (logo) logo.style.opacity = 0.2
+            if (info) info.style.opacity = 0.2
          })
       }
    }, [])

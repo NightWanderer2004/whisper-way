@@ -1,9 +1,10 @@
-import { lexend } from '@/app/fonts'
+import { e_ukraine, lexend } from '@/app/fonts'
 import { useTripStore } from '@/lib/useStore'
 import { cn } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { Button } from './ui/button'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion' // Import Accordion components
 
 const slideAnimation = {
    initial: { y: '100%' },
@@ -35,9 +36,9 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
                resetMapPosition()
                setLocalShowInfoMobile(false)
             }}
-            variant='skeuo-white'
-            size='skeuo-white'
-            className={cn('text-sm text-opacity-65 bg-lime-400/30', lexend.className)}
+            variant='skeuo-mini'
+            size='skeuo-mini'
+            className='text-lime-500/80 relative'
          >
             reset map
          </Button>
@@ -47,144 +48,168 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
                setShowMap(false)
                setLocalShowInfoMobile(false)
             }}
-            variant='skeuo-white'
-            size='skeuo-white'
-            className={cn('text-sm text-opacity-65 bg-orange-400/30', lexend.className)}
+            variant='skeuo-mini'
+            size='skeuo-mini'
+            className='text-orange-500/80 relative'
          >
             start over
          </Button>
-         {/* <button
-            onClick={() => {
-               resetMapPosition()
-               setLocalShowInfoMobile(false)
-            }}
-            className='text-textAccent/80 bg-lime-400/30 text-xs font-normal flex items-center justify-center p-1 px-1.5 leading-none rounded-full border-2 border-white/20 shadow-smooth hover:bg-lime-400/70 transition-colors duration-200'
-         >
-            reset position
-         </button>
-         <button
-            onClick={() => {
-               cleanStorage()
-               setShowMap(false)
-               setLocalShowInfoMobile(false)
-            }}
-            className='text-textAccent/80 bg-rose-400/30 text-xs font-normal flex items-center justify-center p-1 px-1.5 leading-none rounded-full border-2 border-white/20 shadow-smooth hover:bg-rose-400/70 transition-colors duration-200'
-         >
-            start over
-         </button> */}
       </div>
    )
 
    const content = data ? (
-      <>
-         <Section title='Your spots'>
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
-               {data.locations.map((location, index) => (
-                  <InfoCard
-                     key={index}
-                     setShowInfoMobile={setShowInfoMobile}
-                     setMapPosition={setMapPosition}
-                     title={location.name}
-                     coords={[location.lng, location.lat]}
-                     icon={location.icon}
-                  >
-                     {location.description}
-                  </InfoCard>
-               ))}
-            </div>
-         </Section>
-
-         {data.emergency_numbers && (
-            <Section title='Emergency numbers'>
-               <div className='grid grid-cols-2 md:grid-cols-3 gap-3'>
-                  {Object.entries(data.emergency_numbers).map(([service, info]) => (
-                     <InfoCard key={service} title={service.charAt(0).toUpperCase() + service.slice(1).split('_').join(' ')} icon={info.icon}>
-                        {info.number}
+      <Accordion type='multiple' collapsible defaultValue={['item-1']}>
+         <AccordionItem value='item-1'>
+            <AccordionTrigger>Your spots</AccordionTrigger>
+            <AccordionContent>
+               <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
+                  {data.locations.map((location, index) => (
+                     <InfoCard
+                        key={index}
+                        setShowInfoMobile={setShowInfoMobile}
+                        setMapPosition={setMapPosition}
+                        title={location.name}
+                        coords={[location.lng, location.lat]}
+                        icon={location.icon}
+                     >
+                        {location.description}
                      </InfoCard>
                   ))}
                </div>
-            </Section>
+            </AccordionContent>
+         </AccordionItem>
+
+         {data.emergency_numbers && (
+            <AccordionItem value='item-2'>
+               <AccordionTrigger>Emergency numbers</AccordionTrigger>
+               <AccordionContent>
+                  <div className='grid grid-cols-2 md:grid-cols-3 gap-2.5'>
+                     {Object.entries(data.emergency_numbers).map(([service, info]) => (
+                        <InfoCard key={service} title={service.charAt(0).toUpperCase() + service.slice(1).split('_').join(' ')} icon={info.icon}>
+                           {info.number}
+                        </InfoCard>
+                     ))}
+                  </div>
+               </AccordionContent>
+            </AccordionItem>
          )}
 
-         <Section title='Useful info'>
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
-               {data.power_socket && (
-                  <InfoCard title='Power socket' icon={data.power_socket.icon}>
-                     Type: {data.power_socket.type}
-                     <br />
-                     Voltage: {data.power_socket.voltage}
-                  </InfoCard>
-               )}
-               {data.currency && (
-                  <InfoCard title='Currency' icon={data.currency.icon}>
-                     {data.currency.name}
-                  </InfoCard>
-               )}
-               {data.timezone && (
-                  <InfoCard title='Timezone' icon={data.timezone.icon}>
-                     {data.timezone.name}
-                  </InfoCard>
-               )}
-               {data.best_season && (
-                  <InfoCard title='Best season' icon={data.best_season.icon}>
-                     {data.best_season.season}
-                  </InfoCard>
-               )}
-               {data.payment_method && (
-                  <InfoCard title='Payment method' icon={data.payment_method.icon}>
-                     {data.payment_method.info}
-                  </InfoCard>
-               )}
-            </div>
-         </Section>
+         <AccordionItem value='item-3'>
+            <AccordionTrigger>Useful info</AccordionTrigger>
+            <AccordionContent>
+               <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
+                  {data.power_socket && (
+                     <InfoCard title='Power socket' icon={data.power_socket.icon}>
+                        Type: {data.power_socket.type}
+                        <br />
+                        Voltage: {data.power_socket.voltage}
+                     </InfoCard>
+                  )}
+                  {data.currency && (
+                     <InfoCard title='Currency' icon={data.currency.icon}>
+                        {data.currency.name}
+                     </InfoCard>
+                  )}
+                  {data.timezone && (
+                     <InfoCard title='Timezone' icon={data.timezone.icon}>
+                        {data.timezone.name}
+                     </InfoCard>
+                  )}
+                  {data.best_season && (
+                     <InfoCard title='Best season' icon={data.best_season.icon}>
+                        {data.best_season.season}
+                     </InfoCard>
+                  )}
+                  {data.payment_method && (
+                     <InfoCard title='Payment method' icon={data.payment_method.icon}>
+                        {data.payment_method.info}
+                     </InfoCard>
+                  )}
+               </div>
+            </AccordionContent>
+         </AccordionItem>
 
          {(data.transport_prices || data.average_prices) && (
-            <Section title='Prices'>
-               {data.transport_prices && (
-                  <>
-                     <h4 className='text-sm font-normal mb-2'>Transport</h4>
-                     <div className='grid grid-cols-1 md:grid-cols-2 gap-3 mb-4'>
-                        {Object.entries(data.transport_prices).map(([type, info]) => (
-                           <InfoCard key={type} title={type.charAt(0).toUpperCase() + type.slice(1).split('_').join(' ')} icon={info.icon}>
-                              {info.price}
-                           </InfoCard>
-                        ))}
-                     </div>
-                  </>
-               )}
-               {data.average_prices && (
-                  <>
-                     <h4 className='text-sm font-normal mb-2'>Average</h4>
-                     <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
-                        {Object.entries(data.average_prices).map(([item, info]) => (
-                           <InfoCard key={item} title={item.charAt(0).toUpperCase() + item.slice(1).split('_').join(' ')} icon={info.icon}>
-                              {info.price}
-                           </InfoCard>
-                        ))}
-                     </div>
-                  </>
-               )}
-            </Section>
+            <AccordionItem value='item-4'>
+               <AccordionTrigger>Prices</AccordionTrigger>
+               <AccordionContent>
+                  {data.transport_prices && (
+                     <>
+                        <h4 className='text-sm font-normal mb-2'>Transport</h4>
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5 mb-4'>
+                           {Object.entries(data.transport_prices).map(([type, info]) => (
+                              <InfoCard key={type} title={type.charAt(0).toUpperCase() + type.slice(1).split('_').join(' ')} icon={info.icon}>
+                                 {info.price}
+                              </InfoCard>
+                           ))}
+                        </div>
+                     </>
+                  )}
+                  {data.average_prices && (
+                     <>
+                        <h4 className='text-sm font-normal mb-2'>Average</h4>
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
+                           {Object.entries(data.average_prices).map(([item, info]) => (
+                              <InfoCard key={item} title={item.charAt(0).toUpperCase() + item.slice(1).split('_').join(' ')} icon={info.icon}>
+                                 {info.price}
+                              </InfoCard>
+                           ))}
+                        </div>
+                     </>
+                  )}
+               </AccordionContent>
+            </AccordionItem>
          )}
 
          {data.useful_apps && (
-            <Section title='Useful Apps'>
-               <div className='grid grid-cols-1 md:grid-cols-2 gap-3'>
-                  {Object.entries(data.useful_apps).map(([app, info]) => (
-                     <InfoCard key={app} title={app} icon='📱'>
-                        {info.description}
-                     </InfoCard>
-                  ))}
-               </div>
-            </Section>
+            <AccordionItem value='item-5'>
+               <AccordionTrigger>Apps</AccordionTrigger>
+               <AccordionContent>
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
+                     {Object.entries(data.useful_apps).map(([app, info]) => (
+                        <InfoCard key={app} title={app} icon={info.icon}>
+                           {info.description}
+                        </InfoCard>
+                     ))}
+                  </div>
+               </AccordionContent>
+            </AccordionItem>
          )}
-      </>
+
+         {data.useful_phrases && (
+            <AccordionItem value='item-6'>
+               <AccordionTrigger>Useful Phrases</AccordionTrigger>
+               <AccordionContent>
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
+                     {Object.entries(data.useful_phrases).map(([phrase, info]) => (
+                        <InfoCard key={phrase} title={info.phrase} icon={info.icon}>
+                           {info.translation}
+                        </InfoCard>
+                     ))}
+                  </div>
+               </AccordionContent>
+            </AccordionItem>
+         )}
+
+         {data.city_cleanliness && (
+            <AccordionItem value='item-7'>
+               <AccordionTrigger>City Cleanliness</AccordionTrigger>
+               <AccordionContent>
+                  <div className='grid grid-cols-1 gap-2.5'>
+                     <InfoCard title={data.city_cleanliness.rating} icon={data.city_cleanliness.icon}>
+                        {data.city_cleanliness.description}
+                     </InfoCard>
+                  </div>
+               </AccordionContent>
+            </AccordionItem>
+         )}
+      </Accordion>
    ) : null
 
    return (
       <AnimatePresence>
          {/* Desktop Info Panel (always visible) */}
-         <div className='relative z-50 hidden md:block lg:w-[40%] xl:w-[30%] h-full overflow-x-hidden bg-stone-100 overflow-y-auto no-scrollbar border-r border-white/30'>
+         <div className='relative z-50 hidden lg:block lg:w-[40%] xl:w-[30%] h-full overflow-x-hidden bg-stone-100 overflow-y-auto no-scrollbar border-r border-white/30'>
             <div className='p-5 space-y-8'>
                <div className='mt-4 flex items-center justify-between'>
                   {heading}
@@ -199,9 +224,9 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
             <motion.div
                key='info'
                {...slideAnimation}
-               className='info-panel absolute z-50 md:hidden bottom-0 left-0 pb-24 w-full h-full overflow-x-hidden bg-whiteBg overflow-y-auto backdrop-blur-xl no-scrollbar'
+               className='info-panel absolute z-50 lg:hidden bottom-0 left-0 pb-24 w-full h-full overflow-x-hidden bg-whiteBg overflow-y-auto backdrop-blur-xl no-scrollbar'
             >
-               <div className='p-5 pt-16 space-y-8'>
+               <div className='p-4 pt-16 space-y-8'>
                   {controlButtons}
                   <div className='mt-4 flex items-center justify-between'>{heading}</div>
                   {content}
@@ -212,13 +237,6 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
    )
 }
 
-const Section = ({ title, children }) => (
-   <section>
-      <h3 className='text-xl sm:text-2xl md:text-xl font-normal mb-2 text-textAccent'>{title}</h3>
-      {children}
-   </section>
-)
-
 const InfoCard = ({ setMapPosition, setShowInfoMobile, title, icon, children, coords }) => (
    <div
       onClick={() => {
@@ -228,15 +246,15 @@ const InfoCard = ({ setMapPosition, setShowInfoMobile, title, icon, children, co
          }
       }}
       className={cn(
-         'p-3 text-textColor rounded-2xl accent-fill shadow-smooth skeuo-white relative',
-         lexend.className,
-         setMapPosition && 'cursor-pointer hover:scale-[103%] hover:text-textAccent transition-all duration-300',
+         'p-2.5 text-textColor rounded-2xl accent-fill shadow-smooth skeuo-white relative',
+         e_ukraine.className,
+         setMapPosition && 'cursor-pointer lg:hover:scale-[102%] hover:text-textAccent transition-all duration-300',
       )}
    >
-      <h4 className='text-sm sm:text-base md:text-sm font-normal flex items-start mb-1'>
+      <h4 className='text-sm sm:text-base md:text-sm text-textAccent/85 font-normal float-left mb-1.5 w-full'>
          <span className='mr-2'>{icon}</span>
          {title}
       </h4>
-      <p className='text-sm sm:text-base md:text-sm'>{children}</p>
+      <p className={cn('text-sm sm:text-base md:text-sm', lexend.className)}>{children}</p>
    </div>
 )

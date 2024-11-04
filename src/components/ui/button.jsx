@@ -18,6 +18,8 @@ const buttonVariants = cva(
             skeuo: 'skeuo shadow-[0_2px_9px_-1.5px_rgba(0,0,0,25%)] overflow-hidden relative bg-blackBg text-white font-normal lowercase border-2 border-[#161616] rounded-[16px]',
             'skeuo-white':
                'skeuo-white shadow-[0_1.2px_6px_-1.5px_rgba(0,0,0,15%)] overflow-hidden relative bg-whiteBg text-black font-normal lowercase border-2 border-white/10 rounded-[16px]',
+            'skeuo-mini':
+               'skeuo-white bg-whiteBg border-white/30 shadow-smooth text-textColor font-normal lowercase border-2 border-white/10 rounded-[16px]',
          },
          size: {
             default: 'h-9 rounded-md px-4 py-2',
@@ -26,6 +28,7 @@ const buttonVariants = cva(
             icon: 'h-9 w-9',
             skeuo: 'h-[55px] px-[26px] py-[18px] text-base active:text-[15.85px] active:text-opacity-90 transition-all duration-700 ease-gentle',
             'skeuo-white': 'px-[18px] py-[4px] font-normal font-lexend text-[18px] transition-all duration-700 ease-gentle',
+            'skeuo-mini': 'h-8 px-3 text-sm active:text-[13.85px] font-lexend transition-all duration-700 ease-gentle',
          },
       },
       defaultVariants: {
