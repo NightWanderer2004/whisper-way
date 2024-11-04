@@ -23,7 +23,7 @@ export default function Map({ locations }) {
    const coords = mainCityCoords && mainCityCoords.lng && mainCityCoords.lat ? [mainCityCoords.lng, mainCityCoords.lat] : [0, 0]
    const zoom = 12.5
    const maxZoom = 18
-   const minZoom = 11
+   const minZoom = 8
 
    useEffect(() => {
       if (!mapboxgl.supported()) {
