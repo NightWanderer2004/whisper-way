@@ -3,6 +3,7 @@ import { useTripStore } from '@/lib/useStore'
 import { cn } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import { Button } from './ui/button'
 
 const slideAnimation = {
    initial: { y: '100%' },
@@ -29,7 +30,30 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
 
    const controlButtons = (
       <div className='flex space-x-2'>
-         <button
+         <Button
+            onClick={() => {
+               resetMapPosition()
+               setLocalShowInfoMobile(false)
+            }}
+            variant='skeuo-white'
+            size='skeuo-white'
+            className={cn('text-sm text-opacity-65 bg-lime-400/30', lexend.className)}
+         >
+            reset map
+         </Button>
+         <Button
+            onClick={() => {
+               cleanStorage()
+               setShowMap(false)
+               setLocalShowInfoMobile(false)
+            }}
+            variant='skeuo-white'
+            size='skeuo-white'
+            className={cn('text-sm text-opacity-65 bg-orange-400/30', lexend.className)}
+         >
+            start over
+         </Button>
+         {/* <button
             onClick={() => {
                resetMapPosition()
                setLocalShowInfoMobile(false)
@@ -47,7 +71,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
             className='text-textAccent/80 bg-rose-400/30 text-xs font-normal flex items-center justify-center p-1 px-1.5 leading-none rounded-full border-2 border-white/20 shadow-smooth hover:bg-rose-400/70 transition-colors duration-200'
          >
             start over
-         </button>
+         </button> */}
       </div>
    )
 
@@ -178,10 +202,8 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
                className='info-panel absolute z-50 md:hidden bottom-0 left-0 pb-24 w-full h-full overflow-x-hidden bg-whiteBg overflow-y-auto backdrop-blur-xl no-scrollbar'
             >
                <div className='p-5 pt-16 space-y-8'>
-                  <div className='mt-4 flex items-center justify-between'>
-                     {heading}
-                     {controlButtons}
-                  </div>
+                  {controlButtons}
+                  <div className='mt-4 flex items-center justify-between'>{heading}</div>
                   {content}
                </div>
             </motion.div>

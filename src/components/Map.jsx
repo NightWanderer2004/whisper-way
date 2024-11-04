@@ -47,10 +47,8 @@ export default function Map({ locations }) {
 
    useEffect(() => {
       if (locations && map.current) {
-         // Remove existing markers
          document.querySelectorAll('.mapboxgl-marker').forEach(marker => marker.remove())
 
-         // Add new markers
          Array.isArray(locations) &&
             locations.forEach((location, index) => {
                if (location && location.lng && location.lat && location.name) {
