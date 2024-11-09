@@ -53,3 +53,29 @@ export async function getCoordinates(locationData, cityInfo) {
       lat: coordinates[1] || null,
    }
 }
+
+export async function fetchPlaceId(placeName) {
+   const response = await fetch(`/api/fetchPlaceId?placeName=${placeName}`)
+   const data = await response.json()
+
+   if (response.ok) {
+      return data.placeId
+   } else {
+      console.warn(data.error || 'Failed to fetch place ID for this location')
+   }
+
+   return null
+}
+
+export async function fetchPlaceImages(placeId) {
+   const response = await fetch(`/api/fetchPlaceImages?placeId=${placeId}`)
+   const data = await response.json()
+
+   if (response.ok) {
+      return data || []
+   } else {
+      console.warn(data.error || 'Failed to fetch images for this location')
+   }
+
+   return []
+}
