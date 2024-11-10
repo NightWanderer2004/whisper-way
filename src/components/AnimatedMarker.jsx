@@ -1,4 +1,4 @@
-import { useCallback, useState, Suspense } from 'react'
+import { useCallback, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Drawer, DrawerContent, DrawerFooter } from '@/components/ui/drawer'
 import { AlignLeft } from 'lucide-react'
@@ -39,76 +39,80 @@ export function AnimatedMarker({ location, index }) {
          </motion.div>
 
          {isDrawerOpen && (
-            <Suspense fallback={<Skeleton />}>
-               <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-                  <DrawerContent className='pb-20'>
-                     <div className='p-4 pt-2'>
-                        <div className='overflow-x-auto overflow-y-hidden custom-scrollbar snap-both snap-mandatory md:snap-none'>
-                           <div className='flex gap-3 flex-row h-[520px] lg:h-[80vh] w-fit md:w-auto md:grid grid-cols-2 lg:grid-cols-3 md:grid-rows-2'>
-                              {isLoading
-                                 ? Array(6)
-                                      .fill(null)
-                                      .map((_, i) => (
-                                         <div
-                                            key={i}
-                                            className={cn(
-                                               i > 3 && 'hidden lg:block',
-                                               'h-[520px] md:h-full w-[calc(100vw-36px)] md:w-auto bg-stone-50 rounded-2xl rounded-b-none md:rounded-b-2xl shadow-smooth snap-center',
-                                            )}
-                                         />
-                                      ))
-                                 : placeImages.map((url, i) => (
+            <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+               <DrawerContent className='pb-20'>
+                  <div className='p-4 pt-2'>
+                     <div className='overflow-x-auto overflow-y-hidden custom-scrollbar snap-both snap-mandatory md:snap-none'>
+                        <div className='flex gap-3 flex-row h-[520px] lg:h-[80vh] w-fit md:w-auto md:grid grid-cols-2 lg:grid-cols-3 md:grid-rows-2'>
+                           {isLoading
+                              ? Array(6)
+                                   .fill(null)
+                                   .map((_, i) => (
                                       <div
                                          key={i}
                                          className={cn(
                                             i > 3 && 'hidden lg:block',
-                                            'h-[520px] md:h-full w-[calc(100vw-36px)] md:w-auto rounded-2xl rounded-b-none md:rounded-b-2xl border border-b-0 md:border-b border-white/30 overflow-hidden shadow-smooth snap-center',
+                                            'h-[520px] md:h-full w-[calc(100vw-36px)] md:w-auto bg-stone-50 rounded-2xl shadow-smooth snap-center',
                                          )}
-                                      >
-                                         <Image
-                                            src={url}
-                                            height={520}
-                                            width={520}
-                                            alt={`${location.name} - Image ${i + 1}`}
-                                            className='pointer-events-none w-full h-full object-cover object-center'
-                                            priority
-                                         />
-                                      </div>
-                                   ))}
-                           </div>
+                                      />
+                                   ))
+                              : placeImages.map((url, i) => (
+                                   <div
+                                      key={i}
+                                      className={cn(
+                                         i > 3 && 'hidden lg:block',
+                                         'h-[520px] md:h-full w-[calc(100vw-36px)] md:w-auto rounded-2xl border border-white/30 overflow-hidden shadow-smooth snap-center',
+                                      )}
+                                   >
+                                      <Image
+                                         src={url}
+                                         height={520}
+                                         width={520}
+                                         alt={`${location.name} - Image ${i + 1}`}
+                                         className='pointer-events-none w-full h-full object-cover object-center'
+                                         priority
+                                      />
+                                   </div>
+                                ))}
                         </div>
-                        <h3 className='mt-3 text-base text-textColor font-normal flex items-start gap-2'>
-                           <span className='text-[18px]'>{location.icon || '📍'}</span> {placeInfo.name}
-                        </h3>
-                        <p className='mt-[6.5px] text-base text-textColor flex items-start gap-2'>
-                           <AlignLeft className='size-5 min-w-5 mt-0.5 inline-block' />
-                           {location.description || 'No description available 🙁'}
-                        </p>
                      </div>
-                     <DrawerFooter className='fixed z-50 bottom-0 left-0 right-0 p-4 pb-safe-offset-1 lg:pb-safe-offset-2 flex flex-row justify-between'>
-                        <SkeuoBtn main onClick={() => setIsDrawerOpen(false)}>
-                           Close
-                        </SkeuoBtn>
-                        <a className='w-full' href={`https://www.google.com/maps?q=${placeInfo?.name}`} target='_blank' rel='noopener noreferrer'>
-                           <Button
-                              size={'skeuo'}
-                              variant={'skeuo-white'}
-                              type={'button'}
-                              className={cn('bg-white/90 w-full text-[18px] text-textAccent/80')}
-                           >
-                              <span className='text-base text-[#4285F4] uppercase'>G</span>
-                              <span className='text-base text-[#EA4335]'>o</span>
-                              <span className='text-base text-[#FBBC05]'>o</span>
-                              <span className='text-base text-[#4285F4]'>g</span>
-                              <span className='text-base text-[#34A853]'>l</span>
-                              <span className='text-base text-[#EA4335]'>e</span>
-                              <span className='text-base text-textColor block ml-1.5'>maps</span>
-                           </Button>
-                        </a>
-                     </DrawerFooter>
-                  </DrawerContent>
-               </Drawer>
-            </Suspense>
+                     {!placeInfo.name ? (
+                        <Skeleton className='mt-3 w-full h-full rounded-2xl' />
+                     ) : (
+                        <>
+                           <h3 className='mt-3 text-base text-textColor font-normal flex items-start gap-2'>
+                              <span className='text-[18px]'>{location.icon || '📍'}</span> {placeInfo.name}
+                           </h3>
+                           <p className='mt-[6.5px] text-base text-textColor flex items-start gap-2'>
+                              <AlignLeft className='size-5 min-w-5 mt-0.5 inline-block' />
+                              {location.description || 'No description available 🙁'}
+                           </p>
+                        </>
+                     )}
+                  </div>
+                  <DrawerFooter className='fixed z-50 bottom-0 left-0 right-0 p-4 pb-safe-offset-1 lg:pb-safe-offset-2 flex flex-row justify-between'>
+                     <SkeuoBtn main onClick={() => setIsDrawerOpen(false)}>
+                        Close
+                     </SkeuoBtn>
+                     <a className='w-full' href={`https://www.google.com/maps?q=${placeInfo?.name}`} target='_blank' rel='noopener noreferrer'>
+                        <Button
+                           size={'skeuo'}
+                           variant={'skeuo-white'}
+                           type={'button'}
+                           className={cn('bg-white/90 w-full text-[18px] text-textAccent/80')}
+                        >
+                           <span className='text-base text-[#4285F4] uppercase'>G</span>
+                           <span className='text-base text-[#EA4335]'>o</span>
+                           <span className='text-base text-[#FBBC05]'>o</span>
+                           <span className='text-base text-[#4285F4]'>g</span>
+                           <span className='text-base text-[#34A853]'>l</span>
+                           <span className='text-base text-[#EA4335]'>e</span>
+                           <span className='text-base text-textColor block ml-1.5'>maps</span>
+                        </Button>
+                     </a>
+                  </DrawerFooter>
+               </DrawerContent>
+            </Drawer>
          )}
       </>
    )
