@@ -17,7 +17,7 @@ export const metadata = {
    manifest: '/manifest.json',
    appleWebApp: {
       capable: true,
-      display: 'fullscreen',
+      display: 'standalone',
       statusBarStyle: 'black-translucent',
       title: APP_DEFAULT_TITLE,
    },
