@@ -17,7 +17,7 @@ export async function GET(req) {
       console.log(data)
 
       if (data.status === 'OK') {
-         const photos = data.result.photos.slice(0, 3)
+         const photos = data.result.photos.slice(0, 6)
 
          const imageUrls = photos.map(
             photo => `https://maps.googleapis.com/maps/api/place/photo?maxwidth=1000&photo_reference=${photo.photo_reference}&key=${apiKey}`,

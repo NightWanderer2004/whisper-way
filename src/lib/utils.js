@@ -54,12 +54,12 @@ export async function getCoordinates(locationData, cityInfo) {
    }
 }
 
-export async function fetchPlaceId(placeName) {
-   const response = await fetch(`/api/fetchPlaceId?placeName=${placeName}`)
+export async function fetchPlace(placeName) {
+   const response = await fetch(`/api/fetchPlace?placeName=${placeName}`)
    const data = await response.json()
 
    if (response.ok) {
-      return data.placeId
+      return data
    } else {
       console.warn(data.error || 'Failed to fetch place ID for this location')
    }

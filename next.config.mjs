@@ -11,4 +11,7 @@ export default withPWA({
       OPENAI: process.env.OPENAI,
       GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY,
    },
+   images: {
+      domains: ['maps.googleapis.com'],
+   },
 })

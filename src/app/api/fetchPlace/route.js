@@ -9,19 +9,22 @@ export async function GET(req) {
    }
 
    try {
-      const response = await fetch(
-         `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${placeName}&inputtype=textquery&fields=place_id&key=${apiKey}&sessiontoken=URJTHbzczCE3zGL`,
-         {
-            headers: { 'Content-Type': 'application/json' },
-         },
-      )
+      const response = await fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${placeName}&key=${apiKey}`, {
+         headers: { 'Content-Type': 'application/json' },
+      })
 
       const data = await response.json()
 
-      if (data.status === 'OK' && data.candidates.length > 0) {
-         const placeId = data.candidates[0].place_id
+      if (data.status === 'OK' && data.results.length > 0) {
+         const {
+            name,
+            geometry: {
+               location: { lat, lng },
+            },
+            place_id: placeId,
+         } = data.results[0]
 
-         return NextResponse.json({ placeId }, { status: 200 }, { headers: { 'Cache-Control': 'public, max-age=86400' } })
+         return NextResponse.json({ name, coords: { lat, lng }, placeId }, { status: 200 }, { headers: { 'Cache-Control': 'public, max-age=86400' } })
       } else {
          return NextResponse.json({ error: 'No place found with this name' }, { status: 404 })
       }
