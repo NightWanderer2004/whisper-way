@@ -31,43 +31,24 @@ export async function getProximity(cityName) {
 }
 
 export async function getCoordinates(locationData, cityInfo) {
-   const accessToken = process.env.MAP_KEY
-   const { lng, lat } = cityInfo.coords
-   const { country } = cityInfo
    const { min_lon, min_lat, max_lon, max_lat } = cityInfo.bbox
 
-   const responseCoords = await fetch(
-      `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(locationData.address)}.json?country=${country.toLowerCase()}&bbox=${min_lon},${min_lat},${max_lon},${max_lat}&limit=1&proximity=${lng},${lat}&access_token=${accessToken}`,
-   )
+   const res = await fetch(`/api/fetchPlace?placeName=${encodeURIComponent(locationData.name)}&bbox=${min_lon},${min_lat},${max_lon},${max_lat}`)
 
-   const dataCoords = await responseCoords.json()
-   if (dataCoords.features.length == 0) return
+   const data = await res.json()
+   if (!res.ok || !data.name || !data.coords) return
 
-   const coordinates = dataCoords.features[0].center
    return {
-      name: locationData.name,
-      address: locationData.address,
+      placeId: data.placeId,
+      name: data.name,
       description: locationData.description,
       icon: locationData.icon,
-      lng: coordinates[0] || null,
-      lat: coordinates[1] || null,
+      lng: data.coords.lng,
+      lat: data.coords.lat,
    }
 }
 
-export async function fetchPlace(placeName) {
-   const response = await fetch(`/api/fetchPlace?placeName=${placeName}`)
-   const data = await response.json()
-
-   if (response.ok) {
-      return data
-   } else {
-      console.warn(data.error || 'Failed to fetch place ID for this location')
-   }
-
-   return null
-}
-
-export async function fetchPlaceImages(placeId) {
+export async function getPlaceImages(placeId) {
    const response = await fetch(`/api/fetchPlaceImages?placeId=${placeId}`)
    const data = await response.json()
 

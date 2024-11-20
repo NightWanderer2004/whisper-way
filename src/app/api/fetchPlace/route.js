@@ -2,6 +2,11 @@ import { NextResponse } from 'next/server'
 
 export async function GET(req) {
    const placeName = req.nextUrl.searchParams.get('placeName')
+   const bbox = req.nextUrl.searchParams.get('bbox')
+
+   const [swLon, swLat, neLon, neLat] = bbox.split(',').map(Number)
+   const bboxString = `${swLat},${swLon}|${neLat},${neLon}`
+
    const apiKey = process.env.GOOGLE_MAPS_API_KEY
 
    if (!placeName) {
@@ -9,9 +14,12 @@ export async function GET(req) {
    }
 
    try {
-      const response = await fetch(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${placeName}&key=${apiKey}`, {
-         headers: { 'Content-Type': 'application/json' },
-      })
+      const response = await fetch(
+         `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${placeName}&locationbias=rectangle:${bboxString}&key=${apiKey}`,
+         {
+            headers: { 'Content-Type': 'application/json' },
+         },
+      )
 
       const data = await response.json()
 

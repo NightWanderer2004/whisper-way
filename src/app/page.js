@@ -7,9 +7,9 @@ import { useTripStore } from '@/lib/useStore'
 import { TextShimmer } from '@/components/ui/textshimmer'
 
 export default function Home() {
-   const { initializeFromLocalStorage, showMap } = useTripStore()
+   const { tripData, initializeFromLocalStorage, showMap } = useTripStore()
    const [isLoading, setIsLoading] = useState(false)
-   const [locations, setLocations] = useState([])
+   const [locations, setLocations] = useState([tripData.locations])
 
    useEffect(() => {
       initializeFromLocalStorage()

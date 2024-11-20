@@ -8,13 +8,13 @@ export const useTripStore = create(set => ({
       preferences: [],
       currency: 'USD',
    },
-   setUserData: userTrip => set({ userData: userTrip }),
+   setUserData: newUserData => set({ userData: newUserData }),
 
    mainCityCoords: { lng: 0, lat: 0 },
    setMainCityCoords: newCoords => set({ mainCityCoords: newCoords }),
 
    tripData: {},
-   updateTripData: newTripData => set(state => ({ tripData: { ...state.tripData, ...newTripData } })),
+   updateTripData: newTripData => set({ tripData: newTripData }),
 
    showMap: false,
    setShowMap: show => set({ showMap: show }),

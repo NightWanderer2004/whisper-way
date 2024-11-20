@@ -4,26 +4,24 @@ import { Drawer, DrawerContent, DrawerFooter } from '@/components/ui/drawer'
 import { AlignLeft } from 'lucide-react'
 import SkeuoBtn from './SkeuoBtn'
 import { Button } from './ui/button'
-import { cn, fetchPlace, fetchPlaceImages } from '@/lib/utils'
+import { cn, getPlaceImages } from '@/lib/utils'
 import Image from 'next/image'
+import { useTripStore } from '@/lib/useStore'
 
 export function AnimatedMarker({ location, index }) {
    const [isDrawerOpen, setIsDrawerOpen] = useState(false)
    const [placeImages, setPlaceImages] = useState([])
-   const [placeInfo, setPlaceInfo] = useState({})
    const [isLoading, setIsLoading] = useState(false)
+   const city = useTripStore(state => state.userData.city)
 
    const handleMarkerClick = useCallback(async () => {
       setIsLoading(true)
       setIsDrawerOpen(true)
 
-      const { placeId, name, coords } = await fetchPlace(location.name)
-      setPlaceInfo({ placeId, name, coords })
-
-      const imgUrls = await fetchPlaceImages(placeId)
+      const imgUrls = await getPlaceImages(location?.placeId)
       setPlaceImages(imgUrls.images)
       setIsLoading(false)
-   }, [location.name])
+   }, [location?.name])
 
    return (
       <>
@@ -75,7 +73,7 @@ export function AnimatedMarker({ location, index }) {
                      </div>
                   </div>
                   <h3 className='mt-3 text-base text-textColor font-normal flex items-start gap-2'>
-                     <span className='text-[18px]'>{location.icon || '📍'}</span> {placeInfo?.name}
+                     <span className='text-[18px]'>{location.icon || '📍'}</span> {location?.name}
                   </h3>
                   <p className='mt-[6.5px] text-base text-textColor flex items-start gap-2'>
                      <AlignLeft className='size-5 min-w-5 mt-0.5 inline-block' />
@@ -86,7 +84,7 @@ export function AnimatedMarker({ location, index }) {
                   <SkeuoBtn main onClick={() => setIsDrawerOpen(false)}>
                      Close
                   </SkeuoBtn>
-                  <a className='w-full' href={`https://www.google.com/maps?q=${placeInfo?.name}`} target='_blank' rel='noopener noreferrer'>
+                  <a className='w-full' href={`https://www.google.com/maps?q=${location?.name} ${city}`} target='_blank' rel='noopener noreferrer'>
                      <Button
                         size={'skeuo'}
                         variant={'skeuo-white'}

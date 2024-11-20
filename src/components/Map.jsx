@@ -75,6 +75,7 @@ export default function Map({ locations }) {
             zoom: zoom,
             essential: true,
             pitch: 0,
+            bearing: 0,
          })
       }
    }, [coords, zoom])
@@ -82,7 +83,7 @@ export default function Map({ locations }) {
    const setMapPosition = useCallback(
       coords => {
          if (map.current) {
-            map.current.flyTo({ center: coords, zoom: 15, essential: true, pitch: 0 })
+            map.current.flyTo({ center: coords, zoom: 15, essential: true, pitch: 0, bearing: 0 })
          }
       },
       [zoom],
