@@ -14,7 +14,6 @@ export async function GET(req) {
       })
 
       const data = await response.json()
-      console.log(data)
 
       if (data.status === 'OK') {
          const photos = data.result.photos.slice(0, 6)

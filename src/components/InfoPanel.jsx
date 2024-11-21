@@ -22,6 +22,8 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
    const [localShowInfoMobile, setLocalShowInfoMobile] = useState(showInfoMobile)
    const city = useTripStore(state => state.userData.city)
 
+   data = data.country_info || data
+
    useEffect(() => {
       initializeFromLocalStorage()
       setLocalShowInfoMobile(showInfoMobile)
@@ -94,40 +96,46 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
             </AccordionItem>
          )}
 
-         <AccordionItem value='item-3'>
-            <AccordionTrigger>Useful info</AccordionTrigger>
-            <AccordionContent>
-               <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
-                  {data.power_socket && (
-                     <InfoCard title='Power socket' icon={data.power_socket.icon}>
-                        Type: {data.power_socket.type}
-                        <br />
-                        Voltage: {data.power_socket.voltage}
-                     </InfoCard>
-                  )}
-                  {data.currency && (
-                     <InfoCard title='Currency' icon={data.currency.icon}>
-                        {data.currency.name}
-                     </InfoCard>
-                  )}
-                  {data.timezone && (
-                     <InfoCard title='Timezone' icon={data.timezone.icon}>
-                        {data.timezone.name}
-                     </InfoCard>
-                  )}
-                  {data.best_season && (
-                     <InfoCard title='Best season' icon={data.best_season.icon}>
-                        {data.best_season.season}
-                     </InfoCard>
-                  )}
-                  {data.payment_method && (
-                     <InfoCard title='Payment method' icon={data.payment_method.icon}>
-                        {data.payment_method.info}
-                     </InfoCard>
-                  )}
-               </div>
-            </AccordionContent>
-         </AccordionItem>
+         {data.power_socket ||
+            data.currency ||
+            data.timezone ||
+            data.best_season ||
+            (data.payment_method && (
+               <AccordionItem value='item-3'>
+                  <AccordionTrigger>Useful info</AccordionTrigger>
+                  <AccordionContent>
+                     <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
+                        {data.power_socket && (
+                           <InfoCard title='Power socket' icon={data.power_socket.icon}>
+                              Type: {data.power_socket.type}
+                              <br />
+                              Voltage: {data.power_socket.voltage}
+                           </InfoCard>
+                        )}
+                        {data.currency && (
+                           <InfoCard title='Currency' icon={data.currency.icon}>
+                              {data.currency.name}
+                           </InfoCard>
+                        )}
+                        {data.timezone && (
+                           <InfoCard title='Timezone' icon={data.timezone.icon}>
+                              {data.timezone.name}
+                           </InfoCard>
+                        )}
+                        {data.best_season && (
+                           <InfoCard title='Best season' icon={data.best_season.icon}>
+                              {data.best_season.season}
+                           </InfoCard>
+                        )}
+                        {data.payment_method && (
+                           <InfoCard title='Payment method' icon={data.payment_method.icon}>
+                              {data.payment_method.info}
+                           </InfoCard>
+                        )}
+                     </div>
+                  </AccordionContent>
+               </AccordionItem>
+            ))}
 
          {(data.transport_prices || data.average_prices) && (
             <AccordionItem value='item-4'>
