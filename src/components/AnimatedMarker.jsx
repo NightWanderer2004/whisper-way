@@ -38,7 +38,7 @@ export function AnimatedMarker({ location, index }) {
          <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
             <DrawerContent className='pb-20'>
                <div className='p-4 pt-2'>
-                  <div className='overflow-x-auto overflow-y-hidden custom-scrollbar snap-both snap-mandatory md:snap-none'>
+                  <div className='overflow-x-auto overflow-y-hidden custom-scrollbar snap-both snap-mandatory md:snap-none pb-1.5 rounded-2xl'>
                      <div className='flex gap-3 flex-row h-[520px] lg:h-[80vh] w-fit md:w-auto md:grid grid-cols-2 lg:grid-cols-3 md:grid-rows-2'>
                         {isLoading
                            ? Array(6)
