@@ -31,5 +31,10 @@
          "type": "image/png",
          "purpose": "any"
       }
-   ]
+   ],
+   "id": "7285c35c",
+   "description": "App designed to help users quickly find travel spots based on their budget and preferences. It offers important details about cities, like emergency numbers, costs, plugs type and even handy phrases.",
+   "dir": "auto",
+   "lang": "en",
+   "categories": ["navigation", "travel", "utilities"]
 }
