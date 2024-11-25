@@ -1,7 +1,8 @@
 {
    "name": "Travel Mate",
    "short_name": "Travel Mate",
-   "start_url": "/",
+   "start_url": "/trip",
+   "scope": "/trip",
    "display": "fullscreen",
    "orientation": "any",
    "theme_color": "#ffffff",
