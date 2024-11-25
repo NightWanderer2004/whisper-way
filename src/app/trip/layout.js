@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils'
-import { e_ukraine } from './fonts'
-import './globals.css'
+import { e_ukraine } from '../fonts'
+import '../globals.css'
 import { Toaster } from '@/components/ui/sonner'
 
 const APP_NAME = 'Travel Mate'
@@ -40,7 +40,6 @@ export default function RootLayout({ children }) {
             <link rel='icon' type='image/png' sizes='32x32' href='/favicon-32x32.png' />
             <link rel='apple-touch-icon' sizes='180x180' href='/apple-touch-icon.png' />
             <link rel='icon' type='image/png' sizes='192x192' href='/android-chrome-192x192.png' />
-            <link rel='apple-touch-startup-image' href='/startup.jpg' media='(device-width: 375px)' />
             <meta name='mobile-web-app-capable' content='yes' />
          </head>
          <body className={cn(e_ukraine.className)}>{children}</body>

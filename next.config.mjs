@@ -14,4 +14,12 @@ export default withPWA({
    images: {
       domains: ['maps.googleapis.com'],
    },
+   rewrites: async () => {
+      return [
+         {
+            source: '/',
+            destination: '/index.html',
+         },
+      ]
+   },
 })
