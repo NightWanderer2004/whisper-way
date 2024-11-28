@@ -7,7 +7,7 @@ import { lexend } from '../app/fonts'
 
 export function LoadingScreen() {
    return (
-      <div className='text-center'>
+      <div className='text-center overflow-hidden'>
          {[0, 1, 2, 3, 4].map(index => (
             <motion.div
                key={index}
