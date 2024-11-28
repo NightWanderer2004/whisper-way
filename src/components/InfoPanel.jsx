@@ -2,7 +2,7 @@ import { e_ukraine, lexend } from '@/app/fonts'
 import { useTripStore } from '@/lib/useStore'
 import { cn } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Button } from './ui/button'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion' // Import Accordion components
 
@@ -21,7 +21,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
    const { initializeFromLocalStorage } = useTripStore()
    const city = useTripStore(state => state.userData.city)
 
-   const newData = data?.country_info || data
+   const newData = data?.country_info || data?.country || data?.city || data?.city_info || data
 
    useEffect(() => {
       initializeFromLocalStorage()

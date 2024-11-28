@@ -20,7 +20,7 @@ export default function Home() {
    }, [initializeFromLocalStorage])
 
    return (
-      <main className='relative h-dvh text-textColor text-2xl flex flex-col justify-center items-center overflow-hidden'>
+      <main className='relative h-dvh text-textColor text-2xl flex flex-col justify-center items-center overflow-auto sm:overflow-hidden'>
          {isLoading ? (
             <LoadingScreen />
          ) : showMap ? (
