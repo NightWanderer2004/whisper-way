@@ -16,6 +16,7 @@ export async function getProximity(cityName) {
    const bbox = data.features[0].properties.bbox
 
    return {
+      cityName,
       coords: {
          lng: coordinates.longitude,
          lat: coordinates.latitude,
@@ -32,8 +33,11 @@ export async function getProximity(cityName) {
 
 export async function getCoordinates(locationData, cityInfo) {
    const { min_lon, min_lat, max_lon, max_lat } = cityInfo.bbox
+   const { cityName } = cityInfo
 
-   const res = await fetch(`/api/fetchPlace?placeName=${encodeURIComponent(locationData.name)}&bbox=${min_lon},${min_lat},${max_lon},${max_lat}`)
+   const res = await fetch(
+      `/api/fetchPlace?placeName=${encodeURIComponent(locationData.name)}&city=${cityName}&bbox=${min_lon},${min_lat},${max_lon},${max_lat}`,
+   )
 
    const data = await res.json()
    if (!res.ok || !data.name || !data.coords) return

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 
 export async function GET(req) {
+   const city = req.query.get('city')
    const placeName = req.nextUrl.searchParams.get('placeName')
    const bbox = req.nextUrl.searchParams.get('bbox')
 
@@ -15,7 +16,7 @@ export async function GET(req) {
 
    try {
       const response = await fetch(
-         `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${placeName}&locationbias=rectangle:${bboxString}&key=${apiKey}`,
+         `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${placeName},${city}&locationbias=rectangle:${bboxString}&key=${apiKey}`,
          {
             headers: { 'Content-Type': 'application/json' },
          },
