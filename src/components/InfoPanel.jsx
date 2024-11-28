@@ -2,7 +2,7 @@ import { e_ukraine, lexend } from '@/app/fonts'
 import { useTripStore } from '@/lib/useStore'
 import { cn } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from './ui/button'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion' // Import Accordion components
 
@@ -19,13 +19,14 @@ const slideAnimation = {
 export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, setMapPosition, resetMapPosition }) {
    const { cleanStorage, setShowMap } = useTripStore()
    const { initializeFromLocalStorage } = useTripStore()
+   const [localShowInfoMobile, setLocalShowInfoMobile] = useState(showInfoMobile)
    const city = useTripStore(state => state.userData.city)
 
-   const newData = data.country_info || data.country || data.city || data.city_info || data
+   const newData = data?.country_info || data
 
    useEffect(() => {
       initializeFromLocalStorage()
-      setShowInfoMobile(false)
+      setLocalShowInfoMobile(showInfoMobile)
    }, [showInfoMobile])
 
    const heading = <h2 className='text-3xl font-medium text-textAccent'>{city}</h2>
@@ -35,7 +36,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
          <Button
             onClick={() => {
                resetMapPosition()
-               setShowInfoMobile(false)
+               setLocalShowInfoMobile(false)
             }}
             variant='skeuo-mini'
             size='skeuo-mini'
@@ -47,7 +48,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
             onClick={() => {
                cleanStorage()
                setShowMap(false)
-               setShowInfoMobile(false)
+               setLocalShowInfoMobile(false)
             }}
             variant='skeuo-mini'
             size='skeuo-mini'
@@ -221,7 +222,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
          </div>
 
          {/* Mobile Info Panel (animated) */}
-         {showInfoMobile && (
+         {localShowInfoMobile && (
             <motion.div
                key='info'
                {...slideAnimation}
