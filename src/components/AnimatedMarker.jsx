@@ -39,7 +39,7 @@ export function AnimatedMarker({ location, index }) {
             <DrawerContent className='pb-20'>
                <div className='p-4 pt-2'>
                   <div className='overflow-x-auto overflow-y-hidden custom-scrollbar snap-both snap-mandatory md:snap-none pb-1.5 rounded-2xl'>
-                     <div className='flex gap-3 flex-row h-[520px] lg:h-[60dvh] w-fit md:w-auto md:grid grid-cols-2 lg:grid-cols-3 md:grid-rows-2'>
+                     <div className='flex gap-3 flex-row h-[60dvh] lg:h-[75dvh] w-fit md:w-auto md:grid grid-cols-2 lg:grid-cols-3 md:grid-rows-2'>
                         {isLoading
                            ? Array(6)
                                 .fill(null)
@@ -48,7 +48,7 @@ export function AnimatedMarker({ location, index }) {
                                       key={i}
                                       className={cn(
                                          i > 3 && 'hidden lg:block',
-                                         'h-[520px] md:h-full w-[calc(100vw-36px)] md:w-auto bg-stone-50 rounded-2xl shadow-smooth snap-center',
+                                         'h-full w-[calc(100vw-36px)] md:w-auto bg-stone-50 rounded-2xl shadow-smooth snap-center',
                                       )}
                                    />
                                 ))
@@ -57,7 +57,7 @@ export function AnimatedMarker({ location, index }) {
                                    key={i}
                                    className={cn(
                                       i > 3 && 'hidden lg:block',
-                                      'h-[520px] md:h-full w-[calc(100vw-36px)] md:w-auto rounded-2xl border border-white/30 overflow-hidden shadow-smooth snap-center',
+                                      'h-full w-[calc(100vw-36px)] md:w-auto rounded-2xl border border-white/30 overflow-hidden shadow-smooth snap-center',
                                    )}
                                 >
                                    <Image
