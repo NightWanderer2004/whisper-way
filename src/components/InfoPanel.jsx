@@ -19,14 +19,13 @@ const slideAnimation = {
 export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, setMapPosition, resetMapPosition }) {
    const { cleanStorage, setShowMap } = useTripStore()
    const { initializeFromLocalStorage } = useTripStore()
-   const [localShowInfoMobile, setLocalShowInfoMobile] = useState(showInfoMobile)
    const city = useTripStore(state => state.userData.city)
 
    const newData = data?.country_info || data
 
    useEffect(() => {
       initializeFromLocalStorage()
-      setLocalShowInfoMobile(showInfoMobile)
+      setShowInfoMobile(false)
    }, [showInfoMobile])
 
    const heading = <h2 className='text-3xl font-medium text-textAccent'>{city}</h2>
@@ -36,7 +35,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
          <Button
             onClick={() => {
                resetMapPosition()
-               setLocalShowInfoMobile(false)
+               setShowInfoMobile(false)
             }}
             variant='skeuo-mini'
             size='skeuo-mini'
@@ -48,7 +47,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
             onClick={() => {
                cleanStorage()
                setShowMap(false)
-               setLocalShowInfoMobile(false)
+               setShowInfoMobile(false)
             }}
             variant='skeuo-mini'
             size='skeuo-mini'
@@ -180,7 +179,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
 
          {newData.useful_phrases && (
             <AccordionItem value='item-6'>
-               <AccordionTrigger>Useful Phrases</AccordionTrigger>
+               <AccordionTrigger>Handy Phrases</AccordionTrigger>
                <AccordionContent>
                   <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
                      {Object.entries(newData.useful_phrases).map(([phrase, info]) => (
@@ -222,7 +221,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
          </div>
 
          {/* Mobile Info Panel (animated) */}
-         {localShowInfoMobile && (
+         {showInfoMobile && (
             <motion.div
                key='info'
                {...slideAnimation}
