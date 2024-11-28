@@ -22,7 +22,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
    const [localShowInfoMobile, setLocalShowInfoMobile] = useState(showInfoMobile)
    const city = useTripStore(state => state.userData.city)
 
-   const newData = data?.country_info || data
+   const newData = data.country_info || data.country || data.city || data.city_info || data
 
    useEffect(() => {
       initializeFromLocalStorage()
