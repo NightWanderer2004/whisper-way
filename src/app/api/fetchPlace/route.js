@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 
 export async function GET(req) {
-   const city = req.query.get('city')
+   const city = req.nextUrl.searchParams.get('city')
    const placeName = req.nextUrl.searchParams.get('placeName')
    const bbox = req.nextUrl.searchParams.get('bbox')
 
