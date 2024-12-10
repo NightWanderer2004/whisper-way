@@ -101,12 +101,16 @@
    .skeuo:active::before {
       @apply shadow-skeuo-active mix-blend-overlay;
    }
+   .skeuo-white-active {
+      @apply text-textAccent !important;
+   }
    .skeuo-white-active::before {
       @apply shadow-skeuo-white-active mix-blend-soft-light;
    }
 
    .blob {
-      position: absolute;
+      position: fixed;
+      pointer-events: none;
       border-radius: 50%;
       filter: blur(60px);
       opacity: 0.3;

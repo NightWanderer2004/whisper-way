@@ -28,8 +28,8 @@ export default function SkeuoBtn({ children, main = false, onClick, disabled = f
          disabled={disabled}
          type={main ? 'submit' : 'button'}
          className={cn(
-            main ? 'w-full' : 'w-auto text-[18px] text-textAccent/80',
-            isChecked && 'bg-selectedBg skeuo-white-active text-[17.85px] text-opacity-90 text-textAccent',
+            main ? 'w-full' : 'w-auto',
+            isChecked && 'bg-selectedBg skeuo-white-active text-[17.85px]',
             fontClass,
             disabled && 'opacity-50 cursor-not-allowed',
             className,

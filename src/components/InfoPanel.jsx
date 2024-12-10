@@ -40,7 +40,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
             }}
             variant='skeuo-mini'
             size='skeuo-mini'
-            className='text-lime-500/80 bg-white/95 relative lg:fixed lg:top-9 lg:right-4'
+            className='text-lime-500/80 relative lg:fixed lg:top-9 lg:right-4'
          >
             reset map
          </Button>
@@ -93,9 +93,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
                            title={toilet.name}
                            coords={[toilet.lng, toilet.lat]}
                            icon={toilet.icon}
-                        >
-                           {toilet.description}
-                        </InfoCard>
+                        ></InfoCard>
                      ))}
                   </div>
                </AccordionContent>

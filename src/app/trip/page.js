@@ -7,7 +7,7 @@ import { useTripStore } from '@/lib/useStore'
 import { LoadingScreen } from '@/components/LoadingScreen'
 
 export default function Home() {
-   const { tripData, initializeFromLocalStorage, showMap } = useTripStore()
+   const { initializeFromLocalStorage, showMap } = useTripStore()
    const [isLoading, setIsLoading] = useState(false)
    const [locations, setLocations] = useState([])
 

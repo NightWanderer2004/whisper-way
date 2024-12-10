@@ -100,9 +100,33 @@ export default function TripForm({ isLoading, setIsLoading, setLocations }) {
       })
    }
 
+   const checkCityValidity = async city => {
+      try {
+         const response = await openai.chat.completions.create({
+            model: 'gpt-3.5-turbo',
+            messages: [
+               {
+                  role: 'user',
+                  content: `Is "${city}" a valid city or text is not something else? Respond with true or false.`,
+               },
+            ],
+         })
+         return response.choices[0].message.content.toLowerCase() === 'true'
+      } catch (error) {
+         console.error('Error checking city validity:', error)
+         return false
+      }
+   }
+
    const onSubmit = async formData => {
       if (preferences.length === 0) {
          setPreferencesError('Please select at least one preference')
+         return
+      }
+
+      const isCityValid = await checkCityValidity(formData.city)
+      if (!isCityValid) {
+         toast.error('The provided city is not valid. Please check and try again')
          return
       }
 
@@ -112,7 +136,6 @@ export default function TripForm({ isLoading, setIsLoading, setLocations }) {
          const userData = { ...formData, preferences }
          setUserData(userData)
 
-         // Batch localStorage updates
          const storageUpdates = {
             showMap: true,
          }
@@ -140,7 +163,7 @@ export default function TripForm({ isLoading, setIsLoading, setLocations }) {
                },
             ],
             temperature: 1,
-            max_tokens: 2200,
+            max_tokens: 2600,
             top_p: 1,
             frequency_penalty: 0,
             presence_penalty: 0,
@@ -186,7 +209,6 @@ export default function TripForm({ isLoading, setIsLoading, setLocations }) {
          }
          updateTripData(updatedTripData)
 
-         // Store all updates at once
          storageUpdates.tripData = updatedTripData
          storageUpdates.locations = [...formattedLocations, ...formattedToilets]
          storageUpdates.userData = userData
@@ -213,7 +235,7 @@ export default function TripForm({ isLoading, setIsLoading, setLocations }) {
                render={({ field }) => (
                   <FormItem>
                      <FormControl>
-                        <Input className='text-center' placeholder='Osaka' {...field} />
+                        <Input className='text-center' placeholder='Montreal' {...field} />
                      </FormControl>
                      <FormMessage />
                   </FormItem>
