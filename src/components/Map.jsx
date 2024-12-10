@@ -14,6 +14,7 @@ mapboxgl.accessToken = process.env.MAP_KEY
 export default function Map({ locations }) {
    const mainCityCoords = useTripStore(state => state.mainCityCoords)
    const tripData = useTripStore(state => state.tripData)
+   const { public_toilets } = tripData || {}
 
    const map = useRef(null)
    const mapContainerRef = useRef(null)
@@ -50,10 +51,11 @@ export default function Map({ locations }) {
    }, [])
 
    useEffect(() => {
-      if (locations && map.current) {
+      if (map.current) {
          document.querySelectorAll('.mapboxgl-marker').forEach(marker => marker.remove())
 
-         Array.isArray(locations) &&
+         // Add location markers
+         if (Array.isArray(locations)) {
             locations.forEach((location, index) => {
                if (location && location.lng && location.lat && location.name) {
                   const markerElement = document.createElement('div')
@@ -61,12 +63,24 @@ export default function Map({ locations }) {
                   root.render(<AnimatedMarker location={location} map={map.current} index={index} />)
 
                   new mapboxgl.Marker(markerElement).setLngLat([location.lng, location.lat]).addTo(map.current)
-               } else {
-                  console.warn('Invalid location data:', location)
                }
             })
+         }
+
+         // Add toilet markers
+         if (Array.isArray(public_toilets)) {
+            public_toilets.forEach((toilet, index) => {
+               if (toilet && toilet.lng && toilet.lat && toilet.name) {
+                  const markerElement = document.createElement('div')
+                  const root = ReactDOM.createRoot(markerElement)
+                  root.render(<AnimatedMarker location={toilet} map={map.current} index={locations.length + index} />)
+
+                  new mapboxgl.Marker(markerElement).setLngLat([toilet.lng, toilet.lat]).addTo(map.current)
+               }
+            })
+         }
       }
-   }, [locations])
+   }, [locations, public_toilets])
 
    const resetMapPosition = useCallback(() => {
       if (map.current) {

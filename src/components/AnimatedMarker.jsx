@@ -15,13 +15,18 @@ export function AnimatedMarker({ location, index }) {
    const city = useTripStore(state => state.userData.city)
 
    const handleMarkerClick = useCallback(async () => {
+      if (location?.name.toLowerCase().includes('toilet')) {
+         window.open(`https://www.google.com/maps?q=${location?.name} ${city}`, '_blank', 'noopener,noreferrer')
+         return
+      }
+
       setIsLoading(true)
       setIsDrawerOpen(true)
 
       const imgUrls = await getPlaceImages(location?.placeId)
       setPlaceImages(imgUrls.images)
       setIsLoading(false)
-   }, [location?.name])
+   }, [location?.name, city])
 
    return (
       <>
@@ -72,7 +77,7 @@ export function AnimatedMarker({ location, index }) {
                              ))}
                      </div>
                   </div>
-                  <h3 className='mt-3 text-base text-textColor font-normal flex items-start gap-2'>
+                  <h3 className='mt-3 text-base text-textAccent flex items-start gap-2'>
                      <span className='text-[18px]'>{location.icon || '📍'}</span> {location?.name}
                   </h3>
                   <p className='mt-[6.5px] text-base text-textColor flex items-start gap-2'>

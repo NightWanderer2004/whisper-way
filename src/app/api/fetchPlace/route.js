@@ -33,7 +33,17 @@ export async function GET(req) {
             place_id: placeId,
          } = data.results[0]
 
-         return NextResponse.json({ name, coords: { lat, lng }, placeId }, { status: 200 }, { headers: { 'Cache-Control': 'public, max-age=86400' } })
+         return NextResponse.json(
+            {
+               name,
+               coords: { lat, lng },
+               placeId,
+            },
+            {
+               status: 200,
+               headers: { 'Cache-Control': 'public, max-age=86400' },
+            },
+         )
       } else {
          return NextResponse.json({ error: 'No place found with this name' }, { status: 404 })
       }

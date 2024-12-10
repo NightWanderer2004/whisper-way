@@ -9,13 +9,16 @@ import { LoadingScreen } from '@/components/LoadingScreen'
 export default function Home() {
    const { tripData, initializeFromLocalStorage, showMap } = useTripStore()
    const [isLoading, setIsLoading] = useState(false)
-   const [locations, setLocations] = useState([tripData.locations])
+   const [locations, setLocations] = useState([])
 
    useEffect(() => {
       initializeFromLocalStorage()
-      const storedLocations = JSON.parse(localStorage.getItem('locations') || '[]')
-      if (storedLocations.length > 0) {
-         setLocations(storedLocations)
+      const storedData = localStorage.getItem('tripStorageData')
+      if (storedData) {
+         const parsedData = JSON.parse(storedData)
+         if (parsedData.tripData?.locations) {
+            setLocations(parsedData.tripData.locations)
+         }
       }
    }, [initializeFromLocalStorage])
 

@@ -40,7 +40,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
             }}
             variant='skeuo-mini'
             size='skeuo-mini'
-            className='text-lime-500/80 relative'
+            className='text-lime-500/80 bg-white/95 relative lg:fixed lg:top-9 lg:right-4'
          >
             reset map
          </Button>
@@ -62,7 +62,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
    const content = data ? (
       <Accordion type='multiple' collapsible defaultValue={['item-1']}>
          <AccordionItem value='item-1'>
-            <AccordionTrigger>Your spots</AccordionTrigger>
+            <AccordionTrigger>Spots</AccordionTrigger>
             <AccordionContent>
                <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
                   {newData.locations.map((location, index) => (
@@ -80,7 +80,27 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
                </div>
             </AccordionContent>
          </AccordionItem>
-
+         {newData.public_toilets && newData.public_toilets.length > 0 && (
+            <AccordionItem value='item-8'>
+               <AccordionTrigger>Toilets</AccordionTrigger>
+               <AccordionContent>
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
+                     {newData.public_toilets.map((toilet, index) => (
+                        <InfoCard
+                           key={index}
+                           setShowInfoMobile={setShowInfoMobile}
+                           setMapPosition={setMapPosition}
+                           title={toilet.name}
+                           coords={[toilet.lng, toilet.lat]}
+                           icon={toilet.icon}
+                        >
+                           {toilet.description}
+                        </InfoCard>
+                     ))}
+                  </div>
+               </AccordionContent>
+            </AccordionItem>
+         )}
          {newData.emergency_numbers && (
             <AccordionItem value='item-2'>
                <AccordionTrigger>Emergency numbers</AccordionTrigger>
@@ -95,7 +115,6 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
                </AccordionContent>
             </AccordionItem>
          )}
-
          {newData.power_socket && (
             <AccordionItem value='item-3'>
                <AccordionTrigger>Useful info</AccordionTrigger>
@@ -130,7 +149,6 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
                </AccordionContent>
             </AccordionItem>
          )}
-
          {(newData.transport_prices || newData.average_prices) && (
             <AccordionItem value='item-4'>
                <AccordionTrigger>Prices</AccordionTrigger>
@@ -162,7 +180,18 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
                </AccordionContent>
             </AccordionItem>
          )}
-
+         {newData.grocery_stores && (
+            <AccordionItem value='item-9'>
+               <AccordionTrigger>Grocery Stores</AccordionTrigger>
+               <AccordionContent>
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
+                     {newData.grocery_stores.map((store, index) => (
+                        <InfoCard key={index} title={store.name} icon={store.icon}></InfoCard>
+                     ))}
+                  </div>
+               </AccordionContent>
+            </AccordionItem>
+         )}
          {newData.useful_apps && (
             <AccordionItem value='item-5'>
                <AccordionTrigger>Apps</AccordionTrigger>
@@ -177,7 +206,6 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
                </AccordionContent>
             </AccordionItem>
          )}
-
          {newData.useful_phrases && (
             <AccordionItem value='item-6'>
                <AccordionTrigger>Handy Phrases</AccordionTrigger>
@@ -192,7 +220,6 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
                </AccordionContent>
             </AccordionItem>
          )}
-
          {newData.city_cleanliness && (
             <AccordionItem value='item-7'>
                <AccordionTrigger>City Cleanliness</AccordionTrigger>
@@ -253,10 +280,10 @@ const InfoCard = ({ setMapPosition, setShowInfoMobile, title, icon, children, co
          setMapPosition && 'cursor-pointer lg:hover:scale-[102%] hover:text-textAccent transition-all duration-300',
       )}
    >
-      <h4 className='text-sm sm:text-base md:text-sm text-textAccent/85 font-normal float-left mb-1.5 w-full'>
+      <h4 className='text-sm sm:text-base md:text-sm text-textAccent/85 font-normal w-full'>
          <span className='mr-2'>{icon}</span>
          {title}
       </h4>
-      <p className={cn('text-sm sm:text-base md:text-sm', lexend.className)}>{children}</p>
+      {children && <p className={cn('mt-1.5 h-full text-sm sm:text-base md:text-sm', lexend.className)}>{children}</p>}
    </div>
 )
