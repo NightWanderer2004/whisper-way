@@ -40,7 +40,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
             }}
             variant='skeuo-mini'
             size='skeuo-mini'
-            className='text-lime-500/80 relative lg:fixed lg:top-9 lg:right-4'
+            className='z-50 text-lime-500/80 relative lg:fixed lg:top-9 lg:right-4'
          >
             reset map
          </Button>
@@ -52,7 +52,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
             }}
             variant='skeuo-mini'
             size='skeuo-mini'
-            className='text-orange-500/80 relative'
+            className='z-50 text-orange-500/80 relative'
          >
             start over
          </Button>
@@ -80,25 +80,6 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
                </div>
             </AccordionContent>
          </AccordionItem>
-         {newData.public_toilets && newData.public_toilets.length > 0 && (
-            <AccordionItem value='item-8'>
-               <AccordionTrigger>Toilets</AccordionTrigger>
-               <AccordionContent>
-                  <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
-                     {newData.public_toilets.map((toilet, index) => (
-                        <InfoCard
-                           key={index}
-                           setShowInfoMobile={setShowInfoMobile}
-                           setMapPosition={setMapPosition}
-                           title={toilet.name}
-                           coords={[toilet.lng, toilet.lat]}
-                           icon={toilet.icon}
-                        ></InfoCard>
-                     ))}
-                  </div>
-               </AccordionContent>
-            </AccordionItem>
-         )}
          {newData.emergency_numbers && (
             <AccordionItem value='item-2'>
                <AccordionTrigger>Emergency numbers</AccordionTrigger>

@@ -4,7 +4,7 @@ export const useTripStore = create(set => ({
    userData: {
       city: '',
       budget: 0,
-      people: 1,
+      people: 0,
       preferences: [],
       currency: 'USD',
    },

@@ -13,15 +13,8 @@ export function AnimatedMarker({ location, index }) {
    const [placeImages, setPlaceImages] = useState([])
    const [isLoading, setIsLoading] = useState(false)
    const city = useTripStore(state => state.userData.city)
-   const toiletMark = ['🚽', '🚻', '🚾']
-   const isToiletIcon = toiletMark.includes(location?.icon)
 
    const handleMarkerClick = useCallback(async () => {
-      if (isToiletIcon) {
-         window.open(`https://www.google.com/maps?q=${location?.name} ${city}`, '_blank', 'noopener,noreferrer')
-         return
-      }
-
       setIsLoading(true)
       setIsDrawerOpen(true)
 
