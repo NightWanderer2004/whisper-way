@@ -22,8 +22,8 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
    const [localShowInfoMobile, setLocalShowInfoMobile] = useState(showInfoMobile)
    const city = useTripStore(state => state.userData.city)
 
-   const newData = data.country_info || data.country || data.city || data.city_info || data
-
+   const newData = data.country_info || data.country || data.country_information || data.city || data.city_info || data.city_information || data
+   console.log(newData)
    useEffect(() => {
       initializeFromLocalStorage()
       setLocalShowInfoMobile(showInfoMobile)
@@ -65,7 +65,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
             <AccordionTrigger>Spots</AccordionTrigger>
             <AccordionContent>
                <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
-                  {newData.locations.map((location, index) => (
+                  {data.locations.map((location, index) => (
                      <InfoCard
                         key={index}
                         setShowInfoMobile={setShowInfoMobile}
