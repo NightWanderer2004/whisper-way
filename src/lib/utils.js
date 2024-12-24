@@ -37,6 +37,16 @@ export async function getCoordinates(locationData, cityInfo) {
 
    const res = await fetch(
       `/api/fetchPlace?placeName=${encodeURIComponent(locationData.name)}&city=${cityName}&bbox=${min_lon},${min_lat},${max_lon},${max_lat}`,
+      {
+         headers: {
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+            Pragma: 'no-cache',
+            Expires: '0',
+            'Surrogate-Control': 'no-store',
+         },
+         cache: 'no-cache',
+      },
    )
 
    const data = await res.json()
