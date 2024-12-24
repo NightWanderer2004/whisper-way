@@ -214,7 +214,6 @@ export default function TripForm({ isLoading, setIsLoading, setLocations }) {
          localStorage.setItem('tripStorageData', JSON.stringify(storageUpdates))
 
          setLocations(formattedLocations)
-         console.log('formatted: ', formattedLocations)
          setIsLoading(false)
          setShowMap(true)
       } catch (error) {
