@@ -16,7 +16,7 @@ export async function GET(req) {
 
    try {
       const response = await fetch(
-         `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${placeName},${city}&locationbias=rectangle:${bboxString}&key=${apiKey}`,
+         `https://maps.googleapis.com/maps/api/place/textsearch/json?query="${encodeURIComponent(placeName)}"+in+${encodeURIComponent(city)}&locationbias=rectangle:${bboxString}&key=${apiKey}`,
          {
             headers: { 'Content-Type': 'application/json' },
          },
@@ -25,13 +25,17 @@ export async function GET(req) {
       const data = await response.json()
 
       if (data.status === 'OK' && data.results.length > 0) {
+         const exactMatch = data.results.find(result => result.name.toLowerCase() === placeName.toLowerCase())
+
+         const bestMatch = exactMatch || data.results[0]
+
          const {
             name,
             geometry: {
                location: { lat, lng },
             },
             place_id: placeId,
-         } = data.results[0]
+         } = bestMatch
 
          return NextResponse.json(
             {
