@@ -214,11 +214,13 @@ export default function TripForm({ isLoading, setIsLoading, setLocations }) {
          localStorage.setItem('tripStorageData', JSON.stringify(storageUpdates))
 
          setLocations(formattedLocations)
+         console.log('formatted: ', formattedLocations)
          setIsLoading(false)
          setShowMap(true)
       } catch (error) {
          console.error('Error fetching trip data:', error)
          toast.error('Failed to generate trip. Please try again.')
+         setIsLoading(false)
       }
    }
 
