@@ -18,7 +18,13 @@ export async function GET(req) {
       const response = await fetch(
          `https://maps.googleapis.com/maps/api/place/textsearch/json?query="${encodeURIComponent(placeName)}"+in+${encodeURIComponent(city)}&locationbias=rectangle:${bboxString}&key=${apiKey}`,
          {
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+               'Content-Type': 'application/json',
+               'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+               Pragma: 'no-cache',
+               Expires: '0',
+               'Surrogate-Control': 'no-store',
+            },
             cache: 'no-cache',
          },
       )
