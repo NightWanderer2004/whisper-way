@@ -16,10 +16,10 @@ export async function GET(req) {
 
    try {
       const response = await fetch(
-         `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${encodeURIComponent(placeName)}+in+${encodeURIComponent(city)}&locationbias=rectangle:${bboxString}&key=${apiKey}`,
+         `https://maps.googleapis.com/maps/api/place/textsearch/json?query="${encodeURIComponent(placeName)}"+in+${encodeURIComponent(city)}&locationbias=rectangle:${bboxString}&key=${apiKey}`,
          {
             headers: { 'Content-Type': 'application/json' },
-            cache: 'no-store',
+            cache: 'no-cache',
          },
       )
 
@@ -30,11 +30,30 @@ export async function GET(req) {
 
          const bestMatch = exactMatch || data.results[0]
 
-         return NextResponse.json(bestMatch)
+         const {
+            name,
+            geometry: {
+               location: { lat, lng },
+            },
+            place_id: placeId,
+         } = bestMatch
+
+         return NextResponse.json(
+            {
+               name,
+               coords: { lat, lng },
+               placeId,
+            },
+            {
+               status: 200,
+               headers: { 'Cache-Control': 'public, max-age=86400' },
+            },
+         )
       } else {
-         return NextResponse.json({ error: 'No results found' }, { status: 404 })
+         return NextResponse.json({ error: 'No place found with this name' }, { status: 404 })
       }
    } catch (error) {
-      return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 })
+      console.error('Error fetching place:', error)
+      return NextResponse.json({ error: 'Failed to fetch place' }, { status: 500 })
    }
 }
