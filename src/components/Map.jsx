@@ -32,7 +32,7 @@ export default function Map({ locations }) {
       }
       if (!map.current && mapContainerRef.current) {
          map.current = new mapboxgl.Map({
-            style: 'mapbox://styles/night2004/clz02xsbu00fp01qnc82b2lm9',
+            style: 'mapbox://styles/night2004/cm5bi9bxu00lc01sbck6q8nxk',
             container: mapContainerRef.current,
             center: coords,
             zoom: zoom,
