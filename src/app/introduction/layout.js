@@ -4,7 +4,7 @@ import { e_ukraine } from '../fonts'
 import '../globals.css'
 
 export const metadata = {
-   title: 'Travel Mate | Start',
+   title: 'Travel Mate | Introduction',
    description:
       'Get personalized guidance, explore trending spots, and plan your trips with ease. With just a few clicks, you can tailor your trip to match your style.',
 }

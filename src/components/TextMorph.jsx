@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useMemo, useId } from 'react'
 
-export function TextMorph({ children, as: Component = 'p', className, style }) {
+export function TextMorph({ children, Component = 'p', className, style }) {
    const uniqueId = useId()
 
    const characters = useMemo(() => {
