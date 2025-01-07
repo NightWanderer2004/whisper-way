@@ -1,18 +1,15 @@
-'use client'
-import { motion } from 'framer-motion'
 import Image from 'next/image'
 import authImg from '/public/auth-img.webp'
 import AuthForm from '@/components/AuthForm'
+import AnimatedWrapper from '@/components/AnimatedWrapper'
 
-export default function Auth() {
+export const metadata = {
+   title: 'Introduction | Travel Mate',
+}
+
+export default function Introduction() {
    return (
-      <motion.main
-         initial={{ opacity: 0 }}
-         animate={{ opacity: 1 }}
-         exit={{ opacity: 0 }}
-         transition={{ duration: 0.6, ease: 'backOut' }}
-         className='relative overflow-hidden h-dvh text-textColor text-2xl grid grid-cols-1 lg:grid-cols-2 place-items-center p-2'
-      >
+      <AnimatedWrapper className='relative overflow-hidden h-dvh text-textColor text-2xl grid grid-cols-1 lg:grid-cols-2 place-items-center p-2'>
          <AuthForm />
          <Image
             className='hidden lg:block rounded-xl w-full h-full object-cover pointer-events-none border-whiteBg border-2 shadow-smooth'
@@ -22,6 +19,6 @@ export default function Auth() {
             width={1000}
             height={1000}
          />
-      </motion.main>
+      </AnimatedWrapper>
    )
 }

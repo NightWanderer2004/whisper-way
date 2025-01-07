@@ -8,8 +8,8 @@ const withPWA = withPWAInit({
    sw: 'service-worker.js',
    skipWaiting: true,
    disable: process.env.NODE_ENV === 'development',
-   include: [/^\/trip\/?$/],
-   exclude: [/^(?!\/?trip\/?$).*/],
+   include: [/^\/trip\/?$/, /^\/introduction\/?$/],
+   exclude: [/^(?!\/?(trip|introduction)\/?$).*/],
 })
 
 export default withPWA({

@@ -8,7 +8,7 @@ import { cn, getPlaceImages } from '@/lib/utils'
 import Image from 'next/image'
 import { useTripStore } from '@/lib/useStore'
 
-export function AnimatedMarker({ location, index }) {
+export default function AnimatedMarker({ location, index }) {
    const [isDrawerOpen, setIsDrawerOpen] = useState(false)
    const [placeImages, setPlaceImages] = useState([])
    const [isLoading, setIsLoading] = useState(false)
