@@ -1,10 +1,10 @@
 import { e_ukraine, lexend } from '@/app/fonts'
-import { useTripStore } from '@/lib/useStore'
+import { useTripStore } from '@/lib/useTripStore'
 import { cn } from '@/lib/utils'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { Button } from './ui/button'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion' // Import Accordion components
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from './ui/accordion'
 
 const slideAnimation = {
    initial: { y: '100%' },
@@ -16,18 +16,15 @@ const slideAnimation = {
    },
 }
 
-export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, setMapPosition, resetMapPosition }) {
-   const { cleanStorage, setShowMap } = useTripStore()
-   const { initializeFromLocalStorage } = useTripStore()
+export default function InfoPanel({ showInfoMobile, setShowInfoMobile, setMapPosition, resetMapPosition }) {
+   const { cleanStorage, setShowMap, initializeFromLocalStorage, userData } = useTripStore()
    const [localShowInfoMobile, setLocalShowInfoMobile] = useState(showInfoMobile)
-   const city = useTripStore(state => state.userData.city)
-
-   const newData = data.country_info || data.country || data.country_information || data.city || data.city_info || data.city_information || data
+   const city = userData?.city || 'Unknown City'
 
    useEffect(() => {
       initializeFromLocalStorage()
       setLocalShowInfoMobile(showInfoMobile)
-   }, [showInfoMobile])
+   }, [showInfoMobile, initializeFromLocalStorage])
 
    const heading = <h2 className='text-3xl font-medium text-textAccent'>{city}</h2>
 
@@ -59,164 +56,166 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
       </div>
    )
 
-   const content = data ? (
-      <Accordion type='multiple' collapsible defaultValue={['item-1']}>
-         <AccordionItem value='item-1'>
-            <AccordionTrigger>Spots</AccordionTrigger>
-            <AccordionContent>
-               <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
-                  {data.locations.map((location, index) => (
-                     <InfoCard
-                        key={index}
-                        setShowInfoMobile={setShowInfoMobile}
-                        setMapPosition={setMapPosition}
-                        title={location.name}
-                        coords={[location.lng, location.lat]}
-                        icon={location.icon}
-                     >
-                        {location.description}
-                     </InfoCard>
-                  ))}
-               </div>
-            </AccordionContent>
-         </AccordionItem>
-         {newData?.emergency_numbers && (
-            <AccordionItem value='item-2'>
-               <AccordionTrigger>Emergency numbers</AccordionTrigger>
+   const content =
+      newData.locations && newData.locations.length > 0 ? (
+         <Accordion type='multiple' collapsible defaultValue={['item-1']}>
+            <AccordionItem value='item-1'>
+               <AccordionTrigger>Spots</AccordionTrigger>
                <AccordionContent>
-                  <div className='grid grid-cols-2 md:grid-cols-3 gap-2.5'>
-                     {Object.entries(newData?.emergency_numbers).map(([service, info]) => (
-                        <InfoCard key={service} title={service.charAt(0).toUpperCase() + service.slice(1).split('_').join(' ')} icon={info.icon}>
-                           {info.number}
+                  <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
+                     {newData.locations.map((location, index) => (
+                        <InfoCard
+                           key={index}
+                           setShowInfoMobile={setShowInfoMobile}
+                           setMapPosition={setMapPosition}
+                           title={location.name}
+                           coords={[location.lng, location.lat]}
+                           icon={location.icon}
+                        >
+                           {location.description}
                         </InfoCard>
                      ))}
                   </div>
                </AccordionContent>
             </AccordionItem>
-         )}
-         {newData?.power_socket && (
-            <AccordionItem value='item-3'>
-               <AccordionTrigger>Useful info</AccordionTrigger>
-               <AccordionContent>
-                  <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
-                     <InfoCard title='Power socket' icon={newData?.power_socket.icon}>
-                        Type: {newData?.power_socket.type}
-                        <br />
-                        Voltage: {newData?.power_socket.voltage}
-                     </InfoCard>
-                     {newData?.currency && (
-                        <InfoCard title='Currency' icon={newData?.currency.icon}>
-                           {newData?.currency.name}
+            {newData?.emergency_numbers && (
+               <AccordionItem value='item-2'>
+                  <AccordionTrigger>Emergency numbers</AccordionTrigger>
+                  <AccordionContent>
+                     <div className='grid grid-cols-2 md:grid-cols-3 gap-2.5'>
+                        {Object.entries(newData?.emergency_numbers).map(([service, info]) => (
+                           <InfoCard key={service} title={service.charAt(0).toUpperCase() + service.slice(1).split('_').join(' ')} icon={info.icon}>
+                              {info.number}
+                           </InfoCard>
+                        ))}
+                     </div>
+                  </AccordionContent>
+               </AccordionItem>
+            )}
+            {newData?.power_socket && (
+               <AccordionItem value='item-3'>
+                  <AccordionTrigger>Useful info</AccordionTrigger>
+                  <AccordionContent>
+                     <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
+                        <InfoCard title='Power socket' icon={newData?.power_socket.icon}>
+                           Type: {newData?.power_socket.type}
+                           <br />
+                           Voltage: {newData?.power_socket.voltage}
                         </InfoCard>
+                        {newData?.currency && (
+                           <InfoCard title='Currency' icon={newData?.currency.icon}>
+                              {newData?.currency.name}
+                           </InfoCard>
+                        )}
+                        {newData?.timezone && (
+                           <InfoCard title='Timezone' icon={newData?.timezone.icon}>
+                              {newData?.timezone.name}
+                           </InfoCard>
+                        )}
+                        {newData?.best_season && (
+                           <InfoCard title='Best season' icon={newData?.best_season.icon}>
+                              {newData?.best_season.season}
+                           </InfoCard>
+                        )}
+                        {newData?.payment_method && (
+                           <InfoCard title='Payment method' icon={newData?.payment_method.icon}>
+                              {newData?.payment_method.info}
+                           </InfoCard>
+                        )}
+                     </div>
+                  </AccordionContent>
+               </AccordionItem>
+            )}
+            {(newData?.transport_prices || newData?.average_prices) && (
+               <AccordionItem value='item-4'>
+                  <AccordionTrigger>Prices</AccordionTrigger>
+                  <AccordionContent>
+                     {newData?.transport_prices && (
+                        <>
+                           <h4 className='text-sm font-normal mb-2'>Transport</h4>
+                           <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5 mb-4'>
+                              {Object.entries(newData?.transport_prices).map(([type, info]) => (
+                                 <InfoCard key={type} title={type.charAt(0).toUpperCase() + type.slice(1).split('_').join(' ')} icon={info.icon}>
+                                    {info.price}
+                                 </InfoCard>
+                              ))}
+                           </div>
+                        </>
                      )}
-                     {newData?.timezone && (
-                        <InfoCard title='Timezone' icon={newData?.timezone.icon}>
-                           {newData?.timezone.name}
-                        </InfoCard>
+                     {newData?.average_prices && (
+                        <>
+                           <h4 className='text-sm font-normal mb-2'>Average</h4>
+                           <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
+                              {Object.entries(newData?.average_prices).map(([item, info]) => (
+                                 <InfoCard key={item} title={item.charAt(0).toUpperCase() + item.slice(1).split('_').join(' ')} icon={info.icon}>
+                                    {info.price}
+                                 </InfoCard>
+                              ))}
+                           </div>
+                        </>
                      )}
-                     {newData?.best_season && (
-                        <InfoCard title='Best season' icon={newData?.best_season.icon}>
-                           {newData?.best_season.season}
+                  </AccordionContent>
+               </AccordionItem>
+            )}
+            {newData?.grocery_stores && (
+               <AccordionItem value='item-9'>
+                  <AccordionTrigger>Grocery Stores</AccordionTrigger>
+                  <AccordionContent>
+                     <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
+                        {newData?.grocery_stores.map((store, index) => (
+                           <InfoCard key={index} title={store.name} icon={store.icon}></InfoCard>
+                        ))}
+                     </div>
+                  </AccordionContent>
+               </AccordionItem>
+            )}
+            {newData?.useful_apps && (
+               <AccordionItem value='item-5'>
+                  <AccordionTrigger>Apps</AccordionTrigger>
+                  <AccordionContent>
+                     <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
+                        {Object.entries(newData?.useful_apps).map(([app, info]) => (
+                           <InfoCard key={app} title={app} icon={info.icon}>
+                              {info.description}
+                           </InfoCard>
+                        ))}
+                     </div>
+                  </AccordionContent>
+               </AccordionItem>
+            )}
+            {newData?.useful_phrases && (
+               <AccordionItem value='item-6'>
+                  <AccordionTrigger>Handy Phrases</AccordionTrigger>
+                  <AccordionContent>
+                     <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
+                        {Object.entries(newData?.useful_phrases).map(([phrase, info]) => (
+                           <InfoCard key={phrase} title={info.phrase} icon={info.icon}>
+                              {info.translation}
+                           </InfoCard>
+                        ))}
+                     </div>
+                  </AccordionContent>
+               </AccordionItem>
+            )}
+            {newData?.city_cleanliness && (
+               <AccordionItem value='item-7'>
+                  <AccordionTrigger>City Cleanliness</AccordionTrigger>
+                  <AccordionContent>
+                     <div className='grid grid-cols-1 gap-2.5'>
+                        <InfoCard title={newData?.city_cleanliness.rating} icon={newData?.city_cleanliness.icon}>
+                           {newData?.city_cleanliness.description}
                         </InfoCard>
-                     )}
-                     {newData?.payment_method && (
-                        <InfoCard title='Payment method' icon={newData?.payment_method.icon}>
-                           {newData?.payment_method.info}
-                        </InfoCard>
-                     )}
-                  </div>
-               </AccordionContent>
-            </AccordionItem>
-         )}
-         {(newData?.transport_prices || newData?.average_prices) && (
-            <AccordionItem value='item-4'>
-               <AccordionTrigger>Prices</AccordionTrigger>
-               <AccordionContent>
-                  {newData?.transport_prices && (
-                     <>
-                        <h4 className='text-sm font-normal mb-2'>Transport</h4>
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5 mb-4'>
-                           {Object.entries(newData?.transport_prices).map(([type, info]) => (
-                              <InfoCard key={type} title={type.charAt(0).toUpperCase() + type.slice(1).split('_').join(' ')} icon={info.icon}>
-                                 {info.price}
-                              </InfoCard>
-                           ))}
-                        </div>
-                     </>
-                  )}
-                  {newData?.average_prices && (
-                     <>
-                        <h4 className='text-sm font-normal mb-2'>Average</h4>
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
-                           {Object.entries(newData?.average_prices).map(([item, info]) => (
-                              <InfoCard key={item} title={item.charAt(0).toUpperCase() + item.slice(1).split('_').join(' ')} icon={info.icon}>
-                                 {info.price}
-                              </InfoCard>
-                           ))}
-                        </div>
-                     </>
-                  )}
-               </AccordionContent>
-            </AccordionItem>
-         )}
-         {newData?.grocery_stores && (
-            <AccordionItem value='item-9'>
-               <AccordionTrigger>Grocery Stores</AccordionTrigger>
-               <AccordionContent>
-                  <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
-                     {newData?.grocery_stores.map((store, index) => (
-                        <InfoCard key={index} title={store.name} icon={store.icon}></InfoCard>
-                     ))}
-                  </div>
-               </AccordionContent>
-            </AccordionItem>
-         )}
-         {newData?.useful_apps && (
-            <AccordionItem value='item-5'>
-               <AccordionTrigger>Apps</AccordionTrigger>
-               <AccordionContent>
-                  <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
-                     {Object.entries(newData?.useful_apps).map(([app, info]) => (
-                        <InfoCard key={app} title={app} icon={info.icon}>
-                           {info.description}
-                        </InfoCard>
-                     ))}
-                  </div>
-               </AccordionContent>
-            </AccordionItem>
-         )}
-         {newData?.useful_phrases && (
-            <AccordionItem value='item-6'>
-               <AccordionTrigger>Handy Phrases</AccordionTrigger>
-               <AccordionContent>
-                  <div className='grid grid-cols-1 md:grid-cols-2 gap-2.5'>
-                     {Object.entries(newData?.useful_phrases).map(([phrase, info]) => (
-                        <InfoCard key={phrase} title={info.phrase} icon={info.icon}>
-                           {info.translation}
-                        </InfoCard>
-                     ))}
-                  </div>
-               </AccordionContent>
-            </AccordionItem>
-         )}
-         {newData?.city_cleanliness && (
-            <AccordionItem value='item-7'>
-               <AccordionTrigger>City Cleanliness</AccordionTrigger>
-               <AccordionContent>
-                  <div className='grid grid-cols-1 gap-2.5'>
-                     <InfoCard title={newData?.city_cleanliness.rating} icon={newData?.city_cleanliness.icon}>
-                        {newData?.city_cleanliness.description}
-                     </InfoCard>
-                  </div>
-               </AccordionContent>
-            </AccordionItem>
-         )}
-      </Accordion>
-   ) : null
+                     </div>
+                  </AccordionContent>
+               </AccordionItem>
+            )}
+         </Accordion>
+      ) : (
+         <p>No locations available.</p>
+      )
 
    return (
       <AnimatePresence>
-         {/* Desktop Info Panel (always visible) */}
          <div className='relative z-50 hidden lg:block lg:w-[40%] xl:w-[30%] h-full overflow-x-hidden bg-stone-100 overflow-y-auto no-scrollbar border-r border-white/30'>
             <div className='p-5 space-y-8'>
                <div className='mt-4 flex items-center justify-between'>
@@ -227,7 +226,6 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
             </div>
          </div>
 
-         {/* Mobile Info Panel (animated) */}
          {localShowInfoMobile && (
             <motion.div
                key='info'

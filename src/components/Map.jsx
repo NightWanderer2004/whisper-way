@@ -2,7 +2,7 @@ import { useRef, useEffect, useState, useCallback } from 'react'
 import mapboxgl from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { motion } from 'framer-motion'
-import { useTripStore } from '@/lib/useStore'
+import { useTripStore } from '@/lib/useTripStore'
 import BottomButton from './BottomButton'
 import InfoPanel from './InfoPanel'
 import { TextMorph } from './TextMorph'
@@ -13,7 +13,6 @@ mapboxgl.accessToken = process.env.MAP_KEY
 
 export default function Map({ locations }) {
    const mainCityCoords = useTripStore(state => state.mainCityCoords)
-   const tripData = useTripStore(state => state.tripData)
 
    const map = useRef(null)
    const mapContainerRef = useRef(null)
@@ -65,7 +64,7 @@ export default function Map({ locations }) {
             })
          }
       }
-   }, [])
+   }, [locations])
 
    const resetMapPosition = useCallback(() => {
       if (map.current) {
@@ -105,7 +104,6 @@ export default function Map({ locations }) {
          <InfoPanel
             showInfoMobile={showInfoMobile}
             setShowInfoMobile={setShowInfoMobile}
-            data={tripData}
             setMapPosition={setMapPosition}
             resetMapPosition={resetMapPosition}
          />

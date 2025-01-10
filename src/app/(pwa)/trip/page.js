@@ -2,30 +2,35 @@
 import Map from '@/components/Map'
 import { useState, useEffect } from 'react'
 import TripForm from '@/components/TripForm'
-import { useTripStore } from '@/lib/useStore'
 import { LoadingScreen } from '@/components/LoadingScreen'
 import AnimatedWrapper from '@/components/AnimatedWrapper'
 import TripDashboard from '@/components/TripDashboard'
 import { useSupabase } from '@/components/SupabaseProvider'
-import { Button } from '@/components/ui/button'
+import { useTripStore } from '@/lib/useTripStore'
 
 export default function Home() {
-   const { initializeFromLocalStorage, showMap, cleanStorage } = useTripStore()
    const supabase = useSupabase()
+   const { fetchTrips, fetchUserData, showMap, setShowMap } = useTripStore()
    const [isLoading, setIsLoading] = useState(false)
-   const [locations, setLocations] = useState([])
    const [isPlanning, setIsPlanning] = useState(false)
+   const [locations, setLocations] = useState([])
 
    useEffect(() => {
-      initializeFromLocalStorage()
-      const storedData = localStorage.getItem('tripStorageData')
-      if (storedData) {
-         const parsedData = JSON.parse(storedData)
-         if (parsedData.tripData?.locations) {
-            setLocations(parsedData.tripData.locations)
+      const fetchUserDataAndTrips = async () => {
+         await fetchUserData()
+         const {
+            data: { session },
+         } = await supabase.auth.getSession()
+
+         if (session) {
+            fetchTrips(session.user.id)
+         } else {
+            console.error('User is not authenticated')
          }
       }
-   }, [initializeFromLocalStorage])
+
+      fetchUserDataAndTrips()
+   }, [fetchTrips, fetchUserData, supabase])
 
    const handleNewTrip = () => {
       setIsPlanning(true)
@@ -33,7 +38,6 @@ export default function Home() {
 
    const handleLogout = async () => {
       await supabase.auth.signOut()
-      cleanStorage() // Clear local storage data
    }
 
    return (
@@ -44,7 +48,7 @@ export default function Home() {
             showMap ? (
                <Map locations={locations} />
             ) : (
-               <TripForm isLoading={isLoading} setIsLoading={setIsLoading} setLocations={setLocations} />
+               <TripForm isLoading={isLoading} setIsLoading={setIsLoading} setShowMap={setShowMap} setLocations={setLocations} />
             )
          ) : (
             <TripDashboard onNewTrip={handleNewTrip} handleLogout={handleLogout} />

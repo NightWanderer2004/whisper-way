@@ -6,7 +6,7 @@ import SkeuoBtn from './SkeuoBtn'
 import { Button } from './ui/button'
 import { cn, getPlaceImages } from '@/lib/utils'
 import Image from 'next/image'
-import { useTripStore } from '@/lib/useStore'
+import { useTripStore } from '@/lib/useTripStore'
 
 export default function AnimatedMarker({ location, index }) {
    const [isDrawerOpen, setIsDrawerOpen] = useState(false)

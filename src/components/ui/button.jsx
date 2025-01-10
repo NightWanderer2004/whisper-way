@@ -27,7 +27,7 @@ const buttonVariants = cva(
             lg: 'h-10 rounded-md px-8',
             icon: 'h-9 w-9',
             skeuo: 'h-[55px] px-[26px] py-[18px] text-base active:text-[15.85px] active:text-opacity-90 transition-all duration-700 ease-gentle',
-            'skeuo-white': 'px-[18px] py-[4px] font-normal font-lexend text-[18px] text-textAccent/65 transition-all duration-700 ease-gentle',
+            'skeuo-white': 'px-[18px] py-[4px] font-normal font-lexend text-[18px] text-stone-500/80 transition-all duration-700 ease-gentle',
             'skeuo-mini': 'h-8 px-3 text-sm active:text-[13.85px] font-lexend transition-all duration-700 ease-gentle',
          },
       },

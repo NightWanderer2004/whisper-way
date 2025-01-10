@@ -8,11 +8,11 @@ import SkeuoBtn from './SkeuoBtn'
 import { useState } from 'react'
 import OpenAI from 'openai'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
-import { useTripStore } from '@/lib/useStore'
 import { getCoordinates, getProximity } from '@/lib/utils'
 import { AnimatePresence, motion } from 'framer-motion'
 import BottomButton from './BottomButton'
 import { toast } from 'sonner'
+import { useTripStore } from '@/lib/useTripStore'
 
 const openai = new OpenAI({
    apiKey: process.env.OPENAI,
@@ -77,18 +77,18 @@ const currencies = [
    { value: 'ZAR', label: 'R' },
 ]
 
-export default function TripForm({ isLoading, setIsLoading, setLocations }) {
-   const { userData, setUserData, setMainCityCoords, updateTripData, setShowMap } = useTripStore()
-   const [preferences, setPreferences] = useState(userData.preferences || [])
+export default function TripForm({ isLoading, setIsLoading, setShowMap, setLocations }) {
+   const { addTrip } = useTripStore()
+   const [preferences, setPreferences] = useState([])
    const [preferencesError, setPreferencesError] = useState('')
 
    const form = useForm({
       resolver: zodResolver(formSchema),
       defaultValues: {
-         city: userData.city || '',
-         budget: userData.budget || '',
-         people: userData.people || '',
-         currency: userData.currency || 'USD',
+         city: '',
+         budget: '',
+         people: '',
+         currency: 'USD',
       },
    })
 
@@ -107,7 +107,7 @@ export default function TripForm({ isLoading, setIsLoading, setLocations }) {
             messages: [
                {
                   role: 'user',
-                  content: `Is "${city}" a valid city or text is not something else? Respond with true or false.`,
+                  content: `Is "${city}" a valid city or text is not something else? Please make sure that you validate it correct, because sometimes you make mistakes. Respond with true or false.`,
                },
             ],
          })
@@ -133,12 +133,6 @@ export default function TripForm({ isLoading, setIsLoading, setLocations }) {
       setIsLoading(true)
       try {
          const { city, budget, people, currency } = formData
-         const userData = { ...formData, preferences }
-         setUserData(userData)
-
-         const storageUpdates = {
-            showMap: true,
-         }
 
          const response = await openai.chat.completions.create({
             model: 'gpt-4o',
@@ -181,9 +175,6 @@ export default function TripForm({ isLoading, setIsLoading, setLocations }) {
          }
 
          const mainCityInfo = await getProximity(city)
-         setMainCityCoords(mainCityInfo.coords)
-         storageUpdates.mainCityCoords = mainCityInfo.coords
-         storageUpdates.userData = userData
 
          const locationPromises = tripData.locations.map(location =>
             getCoordinates(location, mainCityInfo).catch(error => {
@@ -193,32 +184,19 @@ export default function TripForm({ isLoading, setIsLoading, setLocations }) {
          )
 
          const resolvedLocations = await Promise.all(locationPromises)
-
          const formattedLocations = resolvedLocations.filter(Boolean)
 
          if (formattedLocations.length === 0) {
             throw new Error('No valid locations found')
          }
 
-         const updatedTripData = {
-            ...tripData,
-            locations: formattedLocations,
-         }
-         updateTripData(updatedTripData)
-
-         storageUpdates.tripData = updatedTripData
-         storageUpdates.locations = formattedLocations
-         storageUpdates.userData = userData
-         storageUpdates.mainCityCoords = mainCityInfo.coords
-
-         localStorage.setItem('tripStorageData', JSON.stringify(storageUpdates))
-
+         await addTrip({ city, budget, people, currency, preferences }, formattedLocations)
          setLocations(formattedLocations)
-         setIsLoading(false)
          setShowMap(true)
       } catch (error) {
-         console.error('Error fetching trip data:', error)
+         console.error('Error generating trip:', error)
          toast.error('Failed to generate trip. Please try again.')
+      } finally {
          setIsLoading(false)
       }
    }
