@@ -4,7 +4,7 @@ import { useTripStore } from '@/lib/useTripStore'
 import Link from 'next/link'
 
 export default function TripDashboard({ onNewTrip, handleLogout }) {
-   const { trips } = useTripStore()
+   const { tripData } = useTripStore()
 
    return (
       <div className='flex flex-col items-center gap-8 p-6 max-w-[395px] w-full'>
@@ -17,11 +17,11 @@ export default function TripDashboard({ onNewTrip, handleLogout }) {
             </Button>
          </nav>
          <div className='flex flex-col items-center gap-4'>
-            {trips.length > 0 && (
+            {tripData.trips.length > 0 && (
                <>
                   <h2 className='text-textAccent text-2xl font-medium text-center'>Your Trips</h2>
                   <ul className='list-disc pl-5'>
-                     {trips.map((trip, index) => (
+                     {tripData.trips.map((trip, index) => (
                         <li key={index} className='text-textColor'>
                            {trip.city} - {trip.people} people - Budget: {trip.budget} {trip.currency}
                         </li>
@@ -29,7 +29,7 @@ export default function TripDashboard({ onNewTrip, handleLogout }) {
                   </ul>
                </>
             )}
-            {trips.length === 0 && <h2 className='text-textAccent text-xl mb-3 font-medium text-center'>You have no trips yet</h2>}
+            {tripData.trips.length === 0 && <h2 className='text-textAccent text-xl mb-3 font-medium text-center'>You have no trips yet</h2>}
             <SkeuoBtn main onClick={onNewTrip} className='mb-4'>
                Generate New Trip
             </SkeuoBtn>

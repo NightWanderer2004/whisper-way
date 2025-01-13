@@ -12,7 +12,7 @@ export default function AnimatedMarker({ location, index }) {
    const [isDrawerOpen, setIsDrawerOpen] = useState(false)
    const [placeImages, setPlaceImages] = useState([])
    const [isLoading, setIsLoading] = useState(false)
-   const city = useTripStore(state => state.userData.city)
+   const city = useTripStore(state => state.tripData.userData.city)
 
    const handleMarkerClick = useCallback(async () => {
       setIsLoading(true)

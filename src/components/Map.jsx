@@ -12,7 +12,8 @@ import ReactDOM from 'react-dom/client'
 mapboxgl.accessToken = process.env.MAP_KEY
 
 export default function Map({ locations }) {
-   const mainCityCoords = useTripStore(state => state.mainCityCoords)
+   const { tripData } = useTripStore()
+   const mainCityCoords = tripData.mainCityCoords
 
    const map = useRef(null)
    const mapContainerRef = useRef(null)

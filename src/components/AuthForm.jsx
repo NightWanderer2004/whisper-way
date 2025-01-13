@@ -28,7 +28,6 @@ export default function AuthForm() {
                password,
             })
             if (signUpError) throw signUpError
-            toast.success('Account created successfully! Please verify your email.')
             router.refresh()
          }
       } catch (error) {

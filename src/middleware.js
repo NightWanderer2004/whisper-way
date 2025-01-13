@@ -6,9 +6,19 @@ export async function middleware(req) {
 
    const supabase = createServerClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY, {
       cookies: {
-         get: name => req.cookies.get(name)?.value,
-         set: (name, value, options) => res.cookies.set({ name, value, ...options }),
-         remove: (name, options) => res.cookies.set({ name, value: '', ...options }),
+         getAll() {
+            return req.cookies.getAll()
+         },
+         setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value, options }) => req.cookies.set(name, value))
+            supabaseResponse = NextResponse.next({
+               req,
+            })
+            cookiesToSet.forEach(({ name, value, options }) => supabaseResponse.cookies.set(name, value, options))
+         },
+         // get: name => req.cookies.get(name)?.value,
+         // set: (name, value, options) => res.cookies.set({ name, value, ...options }),
+         // remove: (name, options) => res.cookies.set({ name, value: '', ...options }),
       },
    })
 

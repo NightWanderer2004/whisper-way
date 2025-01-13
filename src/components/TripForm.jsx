@@ -77,7 +77,7 @@ const currencies = [
    { value: 'ZAR', label: 'R' },
 ]
 
-export default function TripForm({ isLoading, setIsLoading, setShowMap, setLocations }) {
+export default function TripForm({ isLoading, setIsLoading, setShowMap, setTripData }) {
    const { addTrip } = useTripStore()
    const [preferences, setPreferences] = useState([])
    const [preferencesError, setPreferencesError] = useState('')
@@ -190,8 +190,18 @@ export default function TripForm({ isLoading, setIsLoading, setShowMap, setLocat
             throw new Error('No valid locations found')
          }
 
-         await addTrip({ city, budget, people, currency, preferences }, formattedLocations)
-         setLocations(formattedLocations)
+         const fullTripData = {
+            city,
+            budget,
+            people,
+            currency,
+            preferences,
+            locations: formattedLocations,
+            country_info: tripData.country_info,
+         }
+
+         await addTrip(fullTripData, formattedLocations)
+         setTripData(fullTripData)
          setShowMap(true)
       } catch (error) {
          console.error('Error generating trip:', error)
