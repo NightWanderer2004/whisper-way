@@ -1,6 +1,6 @@
 {
-   "name": "Travel Mate",
-   "short_name": "Travel Mate",
+   "name": "WhisperWay",
+   "short_name": "WhisperWay",
    "start_url": "/trip",
    "scope": "/trip",
    "display": "fullscreen",

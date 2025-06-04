@@ -16,7 +16,7 @@ export default function Expired() {
          >
             <p className='text-xl leading-tight'>
                Your early access has expired, thank you for your interest in{' '}
-               <span className='my-1 bg-selectedBg rounded-2xl px-2.5 py-0.5 inline-block'>Travel Mate</span>
+               <span className='my-1 bg-selectedBg rounded-2xl px-2.5 py-0.5 inline-block'>WhisperWay</span>
             </p>
          </motion.div>
       </main>

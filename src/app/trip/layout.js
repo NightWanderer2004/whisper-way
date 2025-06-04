@@ -3,8 +3,8 @@ import { e_ukraine } from '../fonts'
 import '../globals.css'
 import { Toaster } from '@/components/ui/sonner'
 
-const APP_NAME = 'Travel Mate'
-const APP_DEFAULT_TITLE = 'Travel Mate'
+const APP_NAME = 'WhisperWay'
+const APP_DEFAULT_TITLE = 'WhisperWay'
 const APP_DESCRIPTION =
    'Get personalized guidance, explore trending spots, and plan your trips with ease. With just a few clicks, you can tailor your trip to match your style.'
 

@@ -2,7 +2,7 @@ import '../globals.css'
 
 export const metadata = {
    title: 'Early Access Expired',
-   description: 'Your early access has expired, thank you for your interest in Travel Mate ✦',
+   description: 'Your early access has expired, thank you for your interest in WhisperWay ✦',
 }
 
 export default function RootLayout({ children }) {
