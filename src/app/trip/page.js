@@ -30,10 +30,11 @@ export default function Home() {
             <Map locations={locations} />
          ) : (
             <motion.div
+               className='relative bottom-10'
                initial={{ opacity: 0 }}
                animate={{ opacity: 1 }}
                exit={{ opacity: 0 }}
-               transition={{ duration: 0.6, delay: 0.35, ease: 'backOut' }}
+               transition={{ duration: 0.35, delay: 0.15, ease: 'easeOut' }}
             >
                <TripForm isLoading={isLoading} setIsLoading={setIsLoading} setLocations={setLocations} />
             </motion.div>

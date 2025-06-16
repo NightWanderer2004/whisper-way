@@ -86,7 +86,7 @@ export default function InfoPanel({ showInfoMobile, setShowInfoMobile, data, set
                <AccordionContent>
                   <div className='grid grid-cols-2 md:grid-cols-3 gap-2.5'>
                      {Object.entries(newData?.emergency_numbers).map(([service, info]) => (
-                        <InfoCard key={service} title={service.charAt(0).toUpperCase() + service.slice(1).split('_').join(' ')} icon={info.icon}>
+                        <InfoCard key={service} title={service.charAt(0).toUpperCase() + service.slice(1).split('_').join(' ')}>
                            {info.number}
                         </InfoCard>
                      ))}
@@ -260,7 +260,7 @@ const InfoCard = ({ setMapPosition, setShowInfoMobile, title, icon, children, co
       )}
    >
       <h4 className='text-sm sm:text-base md:text-sm text-textAccent/85 font-normal w-full'>
-         <span className='mr-2'>{icon}</span>
+         {icon ? <span className='mr-2'>{icon}</span> : ''}
          {title}
       </h4>
       {children && <p className={cn('mt-1.5 h-full text-sm sm:text-base md:text-sm', lexend.className)}>{children}</p>}

@@ -171,7 +171,7 @@ html {
    min-height: calc(100% + env(safe-area-inset-top));
 }
 body {
-   background-image: linear-gradient(rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0.65)), url(/gradient.jpg);
+   background-image: linear-gradient(rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.45)), url(/gradient.jpg);
    background-attachment: fixed;
    background-position: center;
    background-repeat: no-repeat;

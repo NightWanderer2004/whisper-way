@@ -41,7 +41,7 @@ export default function RootLayout({ children }) {
             <link rel='apple-touch-icon' sizes='180x180' href='/apple-touch-icon.png' />
             <link rel='icon' type='image/png' sizes='192x192' href='/android-chrome-192x192.png' />
             <meta name='mobile-web-app-capable' content='yes' />
-            <script async src='https://cdn.seline.so/seline.js' data-token='a3ab53802edc68e'></script>
+            <meta name='robots' content='noindex,nofollow' />
          </head>
          <body className={cn(e_ukraine.className)}>{children}</body>
          <Toaster richColors />

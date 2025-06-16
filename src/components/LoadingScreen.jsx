@@ -30,7 +30,7 @@ export function LoadingScreen() {
                transition={{ duration: 0.6, ease: 'backOut' }}
             >
                <TextShimmer duration={2} spread={5}>
-                  Generating ✦
+                  Searching ✦
                </TextShimmer>
                <TextLoop
                   interval={6}
@@ -38,10 +38,9 @@ export function LoadingScreen() {
                   transition={{ duration: 0.45, ease: 'backOut' }}
                >
                   <p>Fine-tuning your trip...</p>
-                  <p>Personalized travel plan coming soon</p>
-                  <p>Unique journey crafted by AI</p>
-                  <p>Curating breathtaking spots</p>
-                  <p>Your dream trip is almost ready</p>
+                  <p>Personalized spots coming soon</p>
+                  <p>Curating your places</p>
+                  <p>Best spots are almost ready</p>
                </TextLoop>
             </motion.div>
          </AnimatePresence>

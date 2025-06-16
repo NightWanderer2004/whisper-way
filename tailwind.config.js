@@ -13,7 +13,7 @@ module.exports = {
       },
       extend: {
          colors: {
-            whiteBg: 'rgba(250, 250, 249, 0.6)',
+            whiteBg: 'rgba(250, 250, 249, 0.85)',
             selectedBg: 'rgba(132, 204, 22, 0.3)',
             blackBg: '#171717',
             textAccent: '#292524',
