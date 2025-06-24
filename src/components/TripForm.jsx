@@ -374,7 +374,7 @@ export default function TripForm({ isLoading, setIsLoading, setLocations }) {
             </div>
 
             <BottomButton className='lg:mb-28' isForm={true} onClick={form.handleSubmit(onSubmit)} disabled={isLoading}>
-               Search Spots
+               Find Spots
             </BottomButton>
          </form>
       </Form>
