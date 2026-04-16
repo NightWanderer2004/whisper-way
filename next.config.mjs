@@ -13,11 +13,6 @@ const withPWA = withPWAInit({
 })
 
 export default withPWA({
-   env: {
-      MAP_KEY: process.env.MAP_KEY,
-      OPENAI: process.env.OPENAI,
-      GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY,
-   },
    images: {
       domains: ['maps.googleapis.com'],
    },

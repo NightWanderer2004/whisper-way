@@ -7,7 +7,7 @@ export function cn(...inputs) {
 
 export async function getProximity(cityName) {
    const response = await fetch(
-      `https://api.mapbox.com/search/geocode/v6/forward?q=${encodeURIComponent(cityName)}&types=place&access_token=${process.env.MAP_KEY}`,
+      `https://api.mapbox.com/search/geocode/v6/forward?q=${encodeURIComponent(cityName)}&types=place&access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`,
    )
 
    const data = await response.json()

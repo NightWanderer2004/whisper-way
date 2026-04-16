@@ -9,7 +9,7 @@ import { TextMorph } from './TextMorph'
 import { AnimatedMarker } from './AnimatedMarker'
 import ReactDOM from 'react-dom/client'
 
-mapboxgl.accessToken = process.env.MAP_KEY
+mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
 
 export default function Map({ locations }) {
    const mainCityCoords = useTripStore(state => state.mainCityCoords)

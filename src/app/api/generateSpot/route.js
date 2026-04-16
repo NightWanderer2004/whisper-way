@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server'
 import OpenAI from 'openai'
 
+const apiKey = process.env.OPENAI_API_KEY ?? process.env.OPENAI
+
 const openai = new OpenAI({
-   apiKey: process.env.OPENAI,
+   apiKey,
 })
 
 export async function POST(req) {
