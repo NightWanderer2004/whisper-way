@@ -7,6 +7,28 @@ const openai = new OpenAI({
    apiKey,
 })
 
+function toSingleLineString(value) {
+   if (typeof value === 'string') return value.trim()
+   if (value == null) return ''
+   if (typeof value === 'number' || typeof value === 'boolean') return String(value)
+   return ''
+}
+
+function splitListString(value) {
+   const s = toSingleLineString(value)
+   if (!s) return []
+   return s
+      .split(/[,;\n]/g)
+      .map(x => x.trim())
+      .filter(Boolean)
+}
+
+function pickEmoji(text) {
+   if (typeof text !== 'string') return ''
+   const match = text.match(/[\p{Extended_Pictographic}]/u)
+   return match?.[0] ?? ''
+}
+
 function normalizeLocations(locations) {
    if (!Array.isArray(locations)) return []
 
@@ -32,6 +54,192 @@ function normalizeLocations(locations) {
          return { name, description, icon }
       })
       .filter(Boolean)
+}
+
+function normalizeEmergencyNumbers(value) {
+   if (value && typeof value === 'object' && !Array.isArray(value)) {
+      const out = {}
+      for (const [key, info] of Object.entries(value)) {
+         if (info && typeof info === 'object' && !Array.isArray(info)) {
+            const number = toSingleLineString(info.number ?? info.value ?? info.phone ?? info.tel)
+            if (number) out[key] = { number }
+         } else {
+            const number = toSingleLineString(info)
+            if (number) out[key] = { number }
+         }
+      }
+      return Object.keys(out).length ? out : null
+   }
+
+   if (Array.isArray(value)) {
+      const joined = value.map(v => toSingleLineString(v)).filter(Boolean).join(', ')
+      return joined ? { emergency: { number: joined } } : null
+   }
+
+   const s = toSingleLineString(value)
+   return s ? { emergency: { number: s } } : null
+}
+
+function normalizePowerSocket(value) {
+   if (value && typeof value === 'object' && !Array.isArray(value)) {
+      const type = toSingleLineString(value.type)
+      const voltage = toSingleLineString(value.voltage)
+      const icon = toSingleLineString(value.icon) || '🔌'
+      if (type || voltage) return { type, voltage, icon }
+   }
+
+   const s = toSingleLineString(value)
+   if (!s) return null
+
+   const typeMatch = s.match(/type\s*([a-z0-9&\s]+)/i)
+   const voltageMatch = s.match(/(\d{2,3}\s*v)/i)
+
+   return {
+      type: (typeMatch?.[1] || s).trim(),
+      voltage: (voltageMatch?.[1] || '').toUpperCase(),
+      icon: '🔌',
+   }
+}
+
+function normalizeKeyedPriceMap(value, defaultIcon) {
+   if (value && typeof value === 'object' && !Array.isArray(value)) {
+      const out = {}
+      for (const [key, info] of Object.entries(value)) {
+         if (info && typeof info === 'object' && !Array.isArray(info)) {
+            const price = toSingleLineString(info.price ?? info.value ?? info.cost)
+            if (!price) continue
+            const icon = toSingleLineString(info.icon) || defaultIcon
+            out[key] = { price, icon }
+         } else {
+            const price = toSingleLineString(info)
+            if (!price) continue
+            out[key] = { price, icon: defaultIcon }
+         }
+      }
+      return Object.keys(out).length ? out : null
+   }
+
+   const s = Array.isArray(value) ? value.map(v => toSingleLineString(v)).filter(Boolean).join(', ') : toSingleLineString(value)
+   return s ? { general: { price: s, icon: defaultIcon } } : null
+}
+
+function normalizeCurrency(value) {
+   if (value && typeof value === 'object' && !Array.isArray(value)) {
+      const name = toSingleLineString(value.name ?? value.currency)
+      const icon = toSingleLineString(value.icon) || '💱'
+      return name ? { name, icon } : null
+   }
+   const s = toSingleLineString(value)
+   return s ? { name: s, icon: '💱' } : null
+}
+
+function normalizeSimpleInfo(value, key, defaultIcon) {
+   if (value && typeof value === 'object' && !Array.isArray(value)) {
+      const raw = toSingleLineString(value[key])
+      const icon = toSingleLineString(value.icon) || defaultIcon
+      return raw ? { [key]: raw, icon } : null
+   }
+   const s = toSingleLineString(value)
+   return s ? { [key]: s, icon: defaultIcon } : null
+}
+
+function normalizeUsefulApps(value) {
+   if (value && typeof value === 'object' && !Array.isArray(value)) {
+      const out = {}
+      for (const [app, info] of Object.entries(value)) {
+         if (info && typeof info === 'object' && !Array.isArray(info)) {
+            const description = toSingleLineString(info.description ?? info.info ?? info.text)
+            const icon = toSingleLineString(info.icon) || pickEmoji(`${app} ${description}`) || '📱'
+            out[app] = { description, icon }
+         } else {
+            const description = toSingleLineString(info)
+            const icon = pickEmoji(`${app} ${description}`) || '📱'
+            out[app] = { description, icon }
+         }
+      }
+      return Object.keys(out).length ? out : null
+   }
+
+   if (Array.isArray(value)) {
+      const out = {}
+      for (const item of value) {
+         const s = toSingleLineString(item)
+         if (!s) continue
+         const icon = pickEmoji(s) || '📱'
+         const name = s.replace(/[\p{Extended_Pictographic}]/gu, '').trim() || 'App'
+         out[name] = { description: s, icon }
+      }
+      return Object.keys(out).length ? out : null
+   }
+
+   const s = toSingleLineString(value)
+   return s ? { App: { description: s, icon: pickEmoji(s) || '📱' } } : null
+}
+
+function normalizeUsefulPhrases(value) {
+   if (value && typeof value === 'object' && !Array.isArray(value)) {
+      const out = {}
+      for (const [key, info] of Object.entries(value)) {
+         if (info && typeof info === 'object' && !Array.isArray(info)) {
+            const phrase = toSingleLineString(info.phrase ?? key)
+            const translation = toSingleLineString(info.translation ?? info.value ?? info.text)
+            const icon = toSingleLineString(info.icon) || '💬'
+            if (phrase || translation) out[key] = { phrase, translation, icon }
+         } else {
+            const translation = toSingleLineString(info)
+            if (translation) out[key] = { phrase: key, translation, icon: '💬' }
+         }
+      }
+      return Object.keys(out).length ? out : null
+   }
+
+   const parts = Array.isArray(value) ? value.map(v => toSingleLineString(v)).filter(Boolean) : splitListString(value)
+   if (!parts.length) return null
+
+   const out = {}
+   for (const part of parts) {
+      const [left, right] = part.split(':').map(x => x.trim())
+      if (!left) continue
+      const key = left.toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '') || left
+      out[key] = { phrase: left, translation: right || '', icon: '💬' }
+   }
+   return Object.keys(out).length ? out : null
+}
+
+function normalizeCityCleanliness(value) {
+   if (value && typeof value === 'object' && !Array.isArray(value)) {
+      const rating = toSingleLineString(value.rating)
+      const description = toSingleLineString(value.description)
+      const icon = toSingleLineString(value.icon) || '🌍🧼'
+      return rating || description ? { rating: rating || description || 'Cleanliness', description: description || '', icon } : null
+   }
+   const s = toSingleLineString(value)
+   return s ? { rating: s, description: '', icon: '🌍🧼' } : null
+}
+
+function normalizeGroceryStores(value) {
+   if (Array.isArray(value)) {
+      return value
+         .map(v => {
+            if (v && typeof v === 'object' && !Array.isArray(v)) {
+               const name = toSingleLineString(v.name ?? v.title)
+               if (!name) return null
+               const icon = toSingleLineString(v.icon) || '🛒'
+               return { name, icon }
+            }
+            const name = toSingleLineString(v)
+            return name ? { name, icon: '🛒' } : null
+         })
+         .filter(Boolean)
+   }
+
+   if (value && typeof value === 'object') {
+      const values = Object.values(value).map(v => toSingleLineString(v)).filter(Boolean)
+      if (values.length) return values.map(name => ({ name, icon: '🛒' }))
+   }
+
+   const items = splitListString(value)
+   return items.length ? items.map(name => ({ name, icon: '🛒' })) : []
 }
 
 function normalizeTripData(raw) {
@@ -61,28 +269,28 @@ function normalizeTripData(raw) {
    delete country_info.recommendations
    delete country_info.items
 
-   const passthroughKeys = [
-      'emergency_numbers',
-      'power_socket',
-      'transport_prices',
-      'currency',
-      'timezone',
-      'best_season',
-      'payment_method',
-      'useful_apps',
-      'useful_phrases',
-      'city_cleanliness',
-      'grocery_stores',
-      'average_prices',
-   ]
+   const merged = { ...raw, ...country_info }
 
-   for (const key of passthroughKeys) {
-      if (country_info[key] == null && raw[key] != null) {
-         country_info[key] = raw[key]
-      }
+   const normalizedCountryInfo = {
+      emergency_numbers: normalizeEmergencyNumbers(merged.emergency_numbers),
+      power_socket: normalizePowerSocket(merged.power_socket),
+      transport_prices: normalizeKeyedPriceMap(merged.transport_prices, '🚌'),
+      currency: normalizeCurrency(merged.currency),
+      timezone: normalizeSimpleInfo(merged.timezone, 'name', '🕒'),
+      best_season: normalizeSimpleInfo(merged.best_season, 'season', '🌤️'),
+      payment_method: normalizeSimpleInfo(merged.payment_method, 'info', '💳'),
+      useful_apps: normalizeUsefulApps(merged.useful_apps),
+      useful_phrases: normalizeUsefulPhrases(merged.useful_phrases),
+      city_cleanliness: normalizeCityCleanliness(merged.city_cleanliness),
+      grocery_stores: normalizeGroceryStores(merged.grocery_stores),
+      average_prices: normalizeKeyedPriceMap(merged.average_prices, '💰'),
    }
 
-   return { locations, country_info }
+   Object.keys(normalizedCountryInfo).forEach(key => {
+      if (normalizedCountryInfo[key] == null) delete normalizedCountryInfo[key]
+   })
+
+   return { locations, country_info: normalizedCountryInfo }
 }
 
 const SYSTEM_PROMPT = `### Create a Prompt to Generate Travel Recommendations
