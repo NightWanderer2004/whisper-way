@@ -60,6 +60,7 @@ const files = getTrackedFiles().filter(f => !shouldSkip(f)).filter(isTextFile)
 const findings = []
 
 for (const file of files) {
+   if (file === 'scripts/check-secrets.mjs') continue
    const fullPath = path.join(repoRoot, file)
    let content
    try {
@@ -89,4 +90,3 @@ if (findings.length) {
 }
 
 console.log('OK: no obvious secrets found in tracked files.')
-

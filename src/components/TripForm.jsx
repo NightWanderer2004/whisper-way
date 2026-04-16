@@ -168,6 +168,12 @@ export default function TripForm({ isLoading, setIsLoading, setLocations }) {
             return
          }
 
+         if (!Array.isArray(tripData?.locations) || tripData.locations.length === 0) {
+            toast.error('Trip response is missing locations. Please try again.')
+            setIsLoading(false)
+            return
+         }
+
          const mainCityInfo = await getProximity(city)
          setMainCityCoords(mainCityInfo.coords)
          storageUpdates.mainCityCoords = mainCityInfo.coords

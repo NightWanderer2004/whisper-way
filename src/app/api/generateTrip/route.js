@@ -7,6 +7,84 @@ const openai = new OpenAI({
    apiKey,
 })
 
+function normalizeLocations(locations) {
+   if (!Array.isArray(locations)) return []
+
+   return locations
+      .map(item => {
+         if (typeof item === 'string') {
+            const name = item.trim()
+            if (!name) return null
+            return { name, description: '', icon: '📍' }
+         }
+
+         if (!item || typeof item !== 'object' || Array.isArray(item)) return null
+
+         const nameRaw = item.name ?? item.title ?? item.spot ?? item.place
+         const name = typeof nameRaw === 'string' ? nameRaw.trim() : ''
+         if (!name) return null
+
+         const descriptionRaw = item.description ?? item.summary
+         const description = typeof descriptionRaw === 'string' ? descriptionRaw.trim() : ''
+
+         const icon = typeof item.icon === 'string' && item.icon.trim() ? item.icon.trim() : '📍'
+
+         return { name, description, icon }
+      })
+      .filter(Boolean)
+}
+
+function normalizeTripData(raw) {
+   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null
+
+   if (raw.error) {
+      return { error: raw.error }
+   }
+
+   const candidates = [raw.locations, raw.spots, raw.places, raw.recommendations, raw.items]
+   const locations = normalizeLocations(candidates.find(Array.isArray))
+
+   const infoCandidate =
+      raw.country_info ??
+      raw.countryInfo ??
+      raw.country_information ??
+      raw.country ??
+      raw.city_info ??
+      raw.city_information ??
+      raw.city ??
+      raw
+
+   const country_info = infoCandidate && typeof infoCandidate === 'object' && !Array.isArray(infoCandidate) ? { ...infoCandidate } : {}
+   delete country_info.locations
+   delete country_info.spots
+   delete country_info.places
+   delete country_info.recommendations
+   delete country_info.items
+
+   const passthroughKeys = [
+      'emergency_numbers',
+      'power_socket',
+      'transport_prices',
+      'currency',
+      'timezone',
+      'best_season',
+      'payment_method',
+      'useful_apps',
+      'useful_phrases',
+      'city_cleanliness',
+      'grocery_stores',
+      'average_prices',
+   ]
+
+   for (const key of passthroughKeys) {
+      if (country_info[key] == null && raw[key] != null) {
+         country_info[key] = raw[key]
+      }
+   }
+
+   return { locations, country_info }
+}
+
 const SYSTEM_PROMPT = `### Create a Prompt to Generate Travel Recommendations
 
 **Objective**: Generate travel recommendations based on a given city, budget, and preferences.
@@ -50,7 +128,9 @@ The output should be a JSON object that includes:
 - Generate at least 8 unique locations within the city.
 - Use street addresses for coordinates but names for display in the app.
 - If you notice some problems, respond with an "error" key object with a "message" text.
-- Response should be an object with "locations" and "country_info".`
+- Response MUST be a single JSON object with exactly:
+  - "locations": array of objects { "name": string, "description": string, "icon": string }
+  - "country_info": object with country/city info (emergency_numbers, power_socket, transport_prices, currency, timezone, best_season, payment_method, useful_apps, useful_phrases, city_cleanliness, grocery_stores, average_prices).`
 
 export async function POST(req) {
    try {
@@ -98,11 +178,24 @@ Time of year: [${new Date().getFullYear()}-${new Date().getMonth() + 1}]`,
          return NextResponse.json({ error: { message: 'Empty model response' } }, { status: 502 })
       }
 
-      const tripData = JSON.parse(content)
+      const raw = JSON.parse(content)
+      const tripData = normalizeTripData(raw)
+
+      if (!tripData) {
+         return NextResponse.json({ error: { message: 'Invalid model JSON' } }, { status: 502 })
+      }
+
+      if (tripData.error) {
+         return NextResponse.json(tripData, { status: 200, headers: { 'Cache-Control': 'no-store' } })
+      }
+
+      if (!Array.isArray(tripData.locations) || tripData.locations.length === 0) {
+         return NextResponse.json({ error: { message: 'Model response missing locations' } }, { status: 502 })
+      }
+
       return NextResponse.json(tripData, { status: 200, headers: { 'Cache-Control': 'no-store' } })
    } catch (error) {
       console.error('Error generating trip:', error)
       return NextResponse.json({ error: { message: 'Failed to generate trip' } }, { status: 500 })
    }
 }
-
