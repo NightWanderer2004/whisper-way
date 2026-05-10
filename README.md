@@ -1,50 +1,21 @@
 [Landing page](https://whisper-way.co/) | [App itself](https://whisper-way.co/trip)
 
 
-## Realization
+### WhisperWay
 
-### AI (OpenAI)
+WhisperWay is a small Next.js PWA. It turns a rough trip idea into a map and a shortlist of places. You type a city, budget, people count, currency, and a few simple preferences. The app calls OpenAI to draft a trip, snaps each suggested place to a real location, and shows everything on a styled Mapbox GL map with a responsive details panel. Alongside the spots, it shows a compact country brief with emergency numbers, transport prices, sockets, currency, timezone, payment tips, useful apps, and phrases. You get both a route and basic context for the trip.
 
-I use GPT for three things: generate the trip, validate the city, and extend the list.
+### Under the hood
 
-The main GPT call takes city, budget, people count, and preferences, and returns one JSON object: spots (name, description, icon) plus “country info” — emergency numbers, sockets, transport prices, currency, timezone, best season, payment tips, useful apps, phrases, etc. Asking for JSON makes it easy to parse and render.
+All AI work runs on the backend in Next.js API routes. OpenAI keys never touch the browser. A small GPT call first checks that the city looks real. Only then does the main GPT call run and return one JSON object with `spots` and `countryInfo`. For mapping, Mapbox Geocoding turns the city name into coordinates and a bounding box. That box scopes all place search so results stay inside the city. For each GPT spot, the backend calls Google Places Text Search with the spot name, city, and `bbox` to get accurate coordinates and a `place_id`. When you open a spot, the app uses that `place_id` with Place Details and Photo to fetch images for the details view.
 
-Before that, a tiny GPT call checks if the city field is a real city (“true” / “false”), so I don’t send garbage into map/place APIs and can show a clean error.
+On the client, the trip lives in a small Zustand store. It is also mirrored into `localStorage` under a single key. If you close the tab or open the installed app later, WhisperWay hydrates from `localStorage` and restores the same map, list, and inputs. There is no login or server-side user storage. Inputs use React Hook Form and Zod for validation, so rules stay declarative and errors stay consistent.
 
-All of this happens on the backend, so API keys never touch the browser.
+### Interface and implementation
 
-### Maps and places
+The UI uses React, Radix UI, Tailwind CSS, and Framer Motion. The info panel is a side column on desktop and a bottom sheet on mobile. The Mapbox map stays visible behind it. Map controls are minimal. Most of the feel comes from motion: soft spot cards that appear, the sheet sliding over the map, and fast focus jumps between markers and list items. The app is a scoped PWA: a service worker and manifest apply only to `/trip`. The installed WhisperWay works like a tiny dedicated maps tool, while marketing pages stay regular Next.js routes.
 
-The visible map is Mapbox GL with a custom style from Mapbox Studio so it feels like the app, not a default embed. Mapbox Geocoding turns the user’s city into coordinates and a bounding box, so I only search inside that area.
-
-Google is only for places and photos. For each GPT spot, I call Google Places (Text Search) with name, city, and bbox to get coordinates and a `place_id`. When the user taps a spot, I use that `place_id` with Place Details + Photo to show images in the detail view.
-
-So: Mapbox for the map and city bounds, Google for “where exactly is this?” and “what does it look like?”.
-
-### Data and state
-
-Trip data (spots, country info, inputs) lives in Zustand and **also in localStorage** under one key. If you close the tab or open the installed app later, I restore the last trip from localStorage and show the same map and list. No login or server storage.
-
-Inputs (city, budget, people, currency) are validated with Zod + React Hook Form, so I get clear rules and consistent errors without manual checks.
-
-### Flow
-
-1. User fills the form → Zod validates → small GPT call checks the city.
-2. Full GPT call returns trip JSON (locations + country info).
-3. Mapbox Geocoding runs once for the city (coords + bbox).
-4. For each location, the backend calls Google Places (Text Search) and returns coords + `place_id`.
-5. I merge that into the trip data, save to state + localStorage, and render the map.
-6. On tap, I use `place_id` to fetch photos and show them.
-
-### PWA
-
-The app is a PWA, installable on phone or desktop, but **only for the trip part** (e.g. `/trip`). The service worker caches just that scope; marketing pages are left out. A Next.js PWA plugin plus a manifest (name, icons, theme) give it a proper installed‑app feel.
-
-### Other pieces
-
-All third‑party calls go through Next.js API routes, so keys stay on the server. UI is built with Radix, Tailwind, and Framer Motion for smooth transitions. The info panel adapts between desktop side panel and mobile sheet, and map controls are toned down so the map and spots stay the focus.
-
-In short: GPT writes the trip, Mapbox sets the stage, Google anchors spots and photos, state + localStorage keep everything alive across refresh, and the scoped PWA turns it into a small, focused installable app.
+I built WhisperWay as a solo design-engineering project. I wanted to see how OpenAI, Mapbox, and Google Places can work together in a small, opinionated tool: one focused trip surface that lives on your device and is always ready to reopen.
 
 ---
 
