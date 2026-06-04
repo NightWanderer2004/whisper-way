@@ -1,4 +1,4 @@
-[Landing page](https://whisper-way.co/) | [App itself](https://whisper-way.co/trip)
+[Landing page](https://whisper-way.netlify.app/) | [App itself](https://whisper-way.netlify.app/trip)
 
 
 ### WhisperWay
